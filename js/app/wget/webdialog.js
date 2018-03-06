@@ -1,15 +1,16 @@
 "use strict";
 
-define([''], 
-  function() {
-  var createWeb = function(obj) {
-    obj.createWebDialog();
+define([
+  "jquery"
+  ], function($) {
+  var createWeb = function(mapObj, opt) {
+    mapObj.createWebDialog(opt);
   };
-  var removeWeb = function(obj) {
-    obj.removeWebDialog();
+  var removeWeb = function(mapObj, webObj) {
+    mapObj.removeWebDialog(webObj);
   };
-  var updateWeb = function(obj) {
-    obj.updateWebDialog();
+  var updateWeb = function(mapObj, webObj, param) {
+    mapObj.updateWebDialog(webObj, param);
   };
 
   return {

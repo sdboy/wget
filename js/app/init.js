@@ -9,7 +9,7 @@ define(["Map3D"],
       map.mapObj = new CooMap.Map3D({
         id : contentId,
         width: "100%",
-			  height: "800px"
+			  height: "600px"
       });
       map.mapObj.getLicence("192.168.10.34@9059@");
     };
