@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+$back-color: rgb(125, 145, 125);
+$radius: 2px;
+
+.btn{
+  background-color: $back-color;
+  border-radius: $radius;
+}

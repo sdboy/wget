@@ -11,7 +11,7 @@ require.config({
     Map3D : "lib/coorun/Map3D",
     CooMap : "lib/coorun/Class",
     Util : "lib/coorun/Util",
-    webdialog : "lib/app/wget/webdialog"
+    webdialog : "app/wget/webdialog"
   },
   shim: {
     'BMap': {
@@ -25,36 +25,45 @@ require.config({
   }
     
 });
-
 require([
-  "jquery",
   "require",
   "domReady!",
-  "init"
-  ], function($, require, doc, init) {
+  "init",
+  "jquery"
+  ], function(require, doc, init) {
   init.initialize("map");
   var map = init.map.mapObj;
   require([
     "webdialog"
     ], function(webdialog) {
-      var webObj = null;
+      var webObj = [];
+      var x = 0;
+      var y = 0;
       $("#createWeb").click(function() {
-        webObj = webdialog.createWeb(map, {
+        x += 10;
+        y += 10;
+        var obj = webdialog.createWeb(map, {
           url : "http://www.baidu.com",
-          left : "200",
-          top : "200",
+          left : "" + x,
+          top : "" + y,
           width : "320",
           height : "320"
         });
+        // 将新创建的对象放在数组头部
+        webObj.unshift(obj);
       });
       $("#destroyWeb").click(function() {
-        if(webObj !== null){
-          webdialog.removeWeb(map, webObj);
+        /*jshint maxcomplexity: 2 */
+        if(webObj.length > 0){
+          // 从数组尾部取对象
+          webdialog.removeWeb(map, webObj.pop());
         }
       });
       $("#updateWeb").click(function() {
-        if(webObj !== null){
-          webdialog.updateWeb(map, webObj, "sdddd");
+        /*jshint maxcomplexity: 2 */
+        if(webObj.length > 0){
+          // 更新第一个对象
+          webdialog.updateWeb(map, webObj[0], "sdddd");
         }
       });
   });
