@@ -4,7 +4,20 @@ define([
   "wget"
   ], function (wget) {
     var param = {
-      fun : wget
+      map : null,
+      fun : wget,
+      winWidth : "",
+      winHeight : "",
+      arrowSize : "",
+      radial : "",
+      url : "",
+      closeButton : "",
+      arrowColor : "",
+      closeButtonX : "",
+      closeButtonY : "",
+      closeButtonW : "",
+      closeButtonH : "",
+      param : "",
     };
     var result = {};
     var getPos = function (x, y) {
@@ -33,7 +46,25 @@ define([
         });
       }
     };
+    var setParam = function(map, opt) {
+      param.map = map;
+      param.winWidth = opt.winWidth;
+      param.winHeight = opt.winHeight;
+      param.arrowSize = opt.arrowSize;
+      param.radial = opt.radial;
+      param.url = opt.url;
+      param.closeButton = opt.closeButton;
+      param.arrowColor = opt.closeButton;
+      param.closeButtonX = opt.closeButtonX;
+      param.closeButtonY = opt.closeButtonY;
+      param.closeButtonH = opt.closeButtonH;
+      param.closeButtonW = opt.closeButtonW;
+      param.param = opt.param;
+      map.addEvent("FireOnLButtonUp", getPos);
+    };
+    
     return {
+      setParam : setParam,
       getPos : getPos,
       result : result
     }

@@ -75,8 +75,20 @@ require([
     ], function (wget, event) {
       var winObj = [];
       $("#createWin").click(function () {
-        event.param.map = map;
-        map.addEvent("FireOnLButtonUp", event.getPos);
+        event.setParam(map, {
+          "winWidth" : "50",
+          "winHeight" : "50",
+          "arrowSize" : "30",
+          "radial" : "20",
+          "url" : "http://github.com",
+          "closeButton" : "true",
+          "arrowColor" : "65, 177, 255",
+          "closeButtonX" : "30",
+          "closeButtonY" : "10",
+          "closeButtonW" : "20",
+          "closeButtonH" : "20",
+          "param" : "kkkkk"
+        });
       });
       $("#removeWin").click(function () {
 
