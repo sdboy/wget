@@ -11,7 +11,9 @@ require.config({
     Map3D : "lib/coorun/Map3D",
     CooMap : "lib/coorun/Class",
     Util : "lib/coorun/Util",
-    webdialog : "app/wget/webdialog"
+    webdialog : "app/wget/webdialog",
+    wget : "app/wget/wget",
+    event : "app/wget/event"
   },
   shim: {
     'BMap': {
@@ -67,4 +69,24 @@ require([
         }
       });
   });
+  require([
+    "wget",
+    "event"
+    ], function (wget, event) {
+      var winObj = [];
+      $("#createWin").click(function () {
+        event.param.map = map;
+        map.addEvent("FireOnLButtonUp", event.getPos);
+      });
+      $("#removeWin").click(function () {
+
+      });
+      $("#updateWin").click(function () {
+
+      });
+      $("#visiableWin").click(function () {
+
+      });
+      ;
+    });
 });

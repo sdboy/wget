@@ -1,5 +1,7 @@
 "use strict";
-
+/**
+ * 地图初始化模块，初始化三维地图
+ */
 define(["Map3D"],
   function() {
     var map = {

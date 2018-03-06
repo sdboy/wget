@@ -7,7 +7,7 @@ var tools;
 var map;
 //创建坐标转换对象
 var translate;
-var heightObj = new Array();
+var heightObj = [];
 var imageCutIndex = 1;
 
 var Map3D = CooMap.Class.extend({
@@ -25,6 +25,7 @@ var Map3D = CooMap.Class.extend({
 			+------------------------------------------------------------------------------
 		*/
     "initialize": function (option){
+			/*jshint maxcomplexity:6 */
 			this.option = option;
 			this.option.stateFlag = this.option.stateFlag || true;
 			content3d = document.createElement("object");
@@ -333,6 +334,7 @@ var Map3D = CooMap.Class.extend({
 		 * @return {[type]}     [description]
 		 */
 		"loadSphereShp": function(opt){
+			/*jshint maxcomplexity:12 */
 			this.opt = opt;
 			var Url = this.opt.url;
 			var Size = this.opt.Size || "10";
@@ -343,7 +345,7 @@ var Map3D = CooMap.Class.extend({
       var MaxRange = this.opt.MaxRange || "1000000.0";
       var Stipple = this.opt.Stipple || "-1";
       var Width = this.opt.Width || "2";
-			if(this.opt.type == 0){
+			if(this.opt.type === 0){
 				var pSymbol = map.CreateSymbol("PointSymbol");
 				pSymbol.AddConfig("Size", Size);
 				pSymbol.AddConfig("Color", Color);
@@ -375,7 +377,7 @@ var Map3D = CooMap.Class.extend({
 				// 添加矢量图层
       	map.AddLayer(pointShpLayer);
         return pointShpLayer;
-			}else if(this.opt.type == 1){
+			}else if(this.opt.type === 1){
 				// 线
 				var lSymbol = map.CreateSymbol("LineSymbol");
 				// -1 实线 1 虚线
@@ -408,7 +410,7 @@ var Map3D = CooMap.Class.extend({
 				// 添加矢量图层
         map.AddLayer(lineShpLayer);
 				return lineShpLayer;
-			}else if(this.opt.type == 2){
+			}else if(this.opt.type === 2){
 				// 面
 				var pSymbol = map.CreateSymbol("PolygonSymbol");
 			  pSymbol.AddConfig("Color", Color);
@@ -447,7 +449,8 @@ var Map3D = CooMap.Class.extend({
 		 * @return { null }
 		 */
 		"showlayer": function(layer){
-			if(layer == null || layer == undefined){
+			/*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			else{
@@ -461,7 +464,8 @@ var Map3D = CooMap.Class.extend({
 		 * @return { null }
 		 */
 		"hidelayer": function(layer){
-			if(layer == null || layer == undefined){
+			/*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			else{
@@ -475,7 +479,8 @@ var Map3D = CooMap.Class.extend({
 		 * @return { null }
 		 */
 		"removelayer": function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			else{
@@ -523,7 +528,8 @@ var Map3D = CooMap.Class.extend({
 		 * @return { null }
 		 */
 		"clearRoamPath": function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			else{
@@ -532,23 +538,24 @@ var Map3D = CooMap.Class.extend({
 		},
 		"addRoamPath":function(coordStr,viewModel,state,speed){
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
-		    tlo.AddConfig("LayerOptionsName", "DynamicPathLayerOptions"); /////动态路径配置信息 必须为DynamicPathLayerOptions
-		    tlo.AddConfig("Url", "");
-		    tlo.AddConfig("PlayerMode", "PLAYER_ONEWAY");
-		    tlo.AddConfig("ViewObjectMode",viewModel);
-		    tlo.AddConfig("KeyPoints", coordStr);
-		    tlo.AddConfig("LineWidth","2.0");
-		    tlo.AddConfig("LineStipple","65535");
-		    tlo.AddConfig("LineColor", "0.0,1.0,0.0");
-		    tlo.AddConfig("Velocity",speed);
-		    var dynamicPathLayer = map.CreateLayer("DynamicPathLayer", tlo);
-		    dynamicPathLayer.AddObserver();
-		    map.AddLayer(dynamicPathLayer);
-		    dynamicPathLayer.SetVisible(state);//路径隐藏
-	        return dynamicPathLayer;
+			tlo.AddConfig("LayerOptionsName", "DynamicPathLayerOptions"); /////动态路径配置信息 必须为DynamicPathLayerOptions
+			tlo.AddConfig("Url", "");
+			tlo.AddConfig("PlayerMode", "PLAYER_ONEWAY");
+			tlo.AddConfig("ViewObjectMode",viewModel);
+			tlo.AddConfig("KeyPoints", coordStr);
+			tlo.AddConfig("LineWidth","2.0");
+			tlo.AddConfig("LineStipple","65535");
+			tlo.AddConfig("LineColor", "0.0,1.0,0.0");
+			tlo.AddConfig("Velocity",speed);
+			var dynamicPathLayer = map.CreateLayer("DynamicPathLayer", tlo);
+			dynamicPathLayer.AddObserver();
+			map.AddLayer(dynamicPathLayer);
+			dynamicPathLayer.SetVisible(state);//路径隐藏
+	    return dynamicPathLayer;
 		},
 		"playRoamPath": function(layer){  //播放路径
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -558,7 +565,8 @@ var Map3D = CooMap.Class.extend({
 			layer.UpdateLayerOptions(tlo);
 		},
 		"pauseRoamPath": function(layer){  //暂停播放
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -567,7 +575,8 @@ var Map3D = CooMap.Class.extend({
 	    layer.UpdateLayerOptions(tlo);
 		},
 		"stopRoamPath": function(layer){  //停止播放
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -605,8 +614,9 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*测量工具--距离、水平、垂直*/
 		"addSphereMeasure": function(type){  //测量功能
+      /*jshint maxcomplexity:7 */
 			var Measurelayer;
-			if(type == 0){//点测量
+			if(type === 0){//点测量
 				//////创建图层配置信息
         var tlo = map.CreateLayerOptions("pointMeasure");            // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");   // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -641,7 +651,7 @@ var Map3D = CooMap.Class.extend({
         Measurelayer = map.CreateLayer("AnalysisLayer", tlo);        //创建分析图层，第一项参数必须为AnalysisLayer
         map.AddLayer(Measurelayer);                                  //添加分析图层
 			}
-			else if(type == 1){//水平测量
+			else if(type === 1){//水平测量
 			//////创建图层配置信息
         var tlo = map.CreateLayerOptions("horizontalMeasure");           // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -681,7 +691,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
         Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
         map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type == 2){//垂直测量
+			}else if(type === 2){//垂直测量
 			  //////创建图层配置信息
         var tlo = map.CreateLayerOptions("verticalMeasure");             // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -721,7 +731,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
         Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
         map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type == 3){//距离测量
+			}else if(type === 3){//距离测量
 			  //////创建图层配置信息
         var tlo = map.CreateLayerOptions("distanceMesure");              // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -762,7 +772,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
         Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
         map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type == 4){//面积测量
+			}else if(type === 4){//面积测量
 			  //////创建图层配置信息
 	      var tlo = map.CreateLayerOptions("areaMeasure ");                // 创建分析图层配置，给配置起个名称，任意名称
 	      tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -802,7 +812,7 @@ var Map3D = CooMap.Class.extend({
 	      tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
 	      Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
 	      map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type == 5){ // 创建面积测量
+			}else if(type === 5){ // 创建面积测量
 				// 创建图层配置信息
 				var mlo = map.CreateLayerOptions("areaMeasure");                 //创建分析图层配置，给配置起个名称，任意名称
 				mlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       //创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
@@ -851,6 +861,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*设置视角类型 ，viewType为0左视角，1右视角，2前视角，3顶视角，4水平视角，5是45度视角*/
 		"setViewType":function(viewType){
+      /*jshint maxcomplexity:7 */
 			var navagation = map.CreateRoam();
 			///设置视图旋转模式
             ///参数1：是否绕视点旋转：true，按视点；false，按目标点
@@ -892,79 +903,78 @@ var Map3D = CooMap.Class.extend({
 		 */
 		"heightControl":function(height){
 			var fontPath = content3d.GetSDKPath().replace("\\bin","");
-	        fontPath += "\\data\\Fonts\\msyh.ttf";//SDK路径下的字体
-			var tlo = map.CreateLayerOptions("heightControl ")// 创建分析图层配置，给配置起个名称，任意名称
-            tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions"); // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-            tlo.AddConfig("DataSourceTypeName", "as_heightcontrol"); /////// 数据源类型,代表控高分析，必须是此键值对
-            tlo.AddConfig("PointColor", "0.0,0.0,1.0"); //设置点击点的颜色（RGB）
-            tlo.AddConfig("PointSize", "5"); //设置点击点的大小
-            tlo.AddConfig("TextVisible", "true"); ////文字是否被显示
-            tlo.AddConfig("HeightControlLineColor", "0.0,0.0,1.0,1"); //设置线的颜色（RGB）
-            tlo.AddConfig("TextLiftUp", "0"); /////文字显示的抬高高度
-            tlo.AddConfig("AreaNum", "1"); /////绘制的区域个数 
-            tlo.AddConfig("LayersID", "1"); ////要取消范围内模型现状的id集合，以逗号分隔，末尾不能有逗号 如：3,4,5
-            tlo.AddConfig("Height",height); ///控高的高差
-            tlo.AddConfig("TopColor", "0,1,0,0.5"); //设置控高顶面的颜色（RGBA）
-            tlo.AddConfig("SideColor", "1,1,1,0.5"); //设置控高侧面的颜色（RGBA）
-            tlo.AddConfig("RangeLineVisible", "false"); ////范围线是否显示
+	    fontPath += "\\data\\Fonts\\msyh.ttf";//SDK路径下的字体
+			var tlo = map.CreateLayerOptions("heightControl");// 创建分析图层配置，给配置起个名称，任意名称
+			tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions"); // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+			tlo.AddConfig("DataSourceTypeName", "as_heightcontrol"); /////// 数据源类型,代表控高分析，必须是此键值对
+			tlo.AddConfig("PointColor", "0.0,0.0,1.0"); //设置点击点的颜色（RGB）
+			tlo.AddConfig("PointSize", "5"); //设置点击点的大小
+			tlo.AddConfig("TextVisible", "true"); ////文字是否被显示
+			tlo.AddConfig("HeightControlLineColor", "0.0,0.0,1.0,1"); //设置线的颜色（RGB）
+			tlo.AddConfig("TextLiftUp", "0"); /////文字显示的抬高高度
+			tlo.AddConfig("AreaNum", "1"); /////绘制的区域个数 
+			tlo.AddConfig("LayersID", "1"); ////要取消范围内模型现状的id集合，以逗号分隔，末尾不能有逗号 如：3,4,5
+			tlo.AddConfig("Height",height); ///控高的高差
+			tlo.AddConfig("TopColor", "0,1,0,0.5"); //设置控高顶面的颜色（RGBA）
+			tlo.AddConfig("SideColor", "1,1,1,0.5"); //设置控高侧面的颜色（RGBA）
+			tlo.AddConfig("RangeLineVisible", "false"); ////范围线是否显示
 
-            /////创建文字符号
-            var pSymbol = map.CreateSymbol("TextSymbol"); //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置 
-            pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0"); //设置文字颜色（RGBA）
-            pSymbol.AddConfig("Font", fontPath); //设置字体类型,字体文件一定要存在
-            pSymbol.AddConfig("Size", "15"); ///设置字体大小
-            pSymbol.AddConfig("CharacterMode", "1"); // 取值 1 -- 始终朝向相机
-            pSymbol.AddConfig("AlignmentMode", "5"); // 文字对齐方式
-            pSymbol.AddConfig("AxisAlignment", "6"); // 旋转轴 0 - 7 ， 6: 自动
-            pSymbol.AddConfig("RemoveDuplicateLabels", "false"); // 去重复			
-            pSymbol.AddConfig("IsEmbolden", "false"); //字体是否加粗
-            pSymbol.AddConfig("IsTransform", "false"); //字体是否为斜体
-            pSymbol.AddConfig("IsUnderline", "false"); //字体是否有下划线
-            pSymbol.AddConfig("IsBack", "false"); //是否设置背景色
-            pSymbol.AddConfig("BackColor", "0,1.0,1.0,1"); //背景颜色，是否设置背景色为true有效
-            pSymbol.AddConfig("FieldPrecision", "-20"); //字段精度
+			/////创建文字符号
+			var pSymbol = map.CreateSymbol("TextSymbol"); //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置 
+			pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0"); //设置文字颜色（RGBA）
+			pSymbol.AddConfig("Font", fontPath); //设置字体类型,字体文件一定要存在
+			pSymbol.AddConfig("Size", "15"); ///设置字体大小
+			pSymbol.AddConfig("CharacterMode", "1"); // 取值 1 -- 始终朝向相机
+			pSymbol.AddConfig("AlignmentMode", "5"); // 文字对齐方式
+			pSymbol.AddConfig("AxisAlignment", "6"); // 旋转轴 0 - 7 ， 6: 自动
+			pSymbol.AddConfig("RemoveDuplicateLabels", "false"); // 去重复			
+			pSymbol.AddConfig("IsEmbolden", "false"); //字体是否加粗
+			pSymbol.AddConfig("IsTransform", "false"); //字体是否为斜体
+			pSymbol.AddConfig("IsUnderline", "false"); //字体是否有下划线
+			pSymbol.AddConfig("IsBack", "false"); //是否设置背景色
+			pSymbol.AddConfig("BackColor", "0,1.0,1.0,1"); //背景颜色，是否设置背景色为true有效
+			pSymbol.AddConfig("FieldPrecision", "-20"); //字段精度
 
-            /////创建样式
-            var pStyle = map.CreateStyle("Text"); /////创建Style，名字可以任意
-            pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); ///添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+			/////创建样式
+			var pStyle = map.CreateStyle("Text"); /////创建Style，名字可以任意
+			pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); ///添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 
-            //////////将样式添加到图层配置里
-            tlo.AddConfig("Style", pStyle.GetConfig()); ////第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
+			//////////将样式添加到图层配置里
+			tlo.AddConfig("Style", pStyle.GetConfig()); ////第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
 
-            var heightControl = map.CreateLayer("AnalysisLayer", tlo); ////创建分析图层，第一项参数必须为AnalysisLayer
-            map.AddLayer(heightControl); ///添加分析图层
-	        return heightControl;
-
+			var heightControl = map.CreateLayer("AnalysisLayer", tlo); ////创建分析图层，第一项参数必须为AnalysisLayer
+			map.AddLayer(heightControl); ///添加分析图层
+	    return heightControl;
 		},
 		
 		"updateHeightControl":function(layer,height){
-//			alert("更新");
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerOption();
 			var points = opt.GetConfigValueByKey("Points");//起始点的坐标
 			var pointsIndex = opt.GetConfigValueByKey("PointsIndex");
-			var mlo3 = map.CreateLayerOptions("")
-/*			mlo3.AddConfig("LayerOptionsName", "HeightControlOptions")
-		    mlo3.AddConfig("Points",points);
-		    mlo3.AddConfig("PointsIndex",pointsIndex);
-		    mlo3.AddConfig("Height",height);
-		    mlo3.AddConfig("IsLoad","true");
-*/		    
-		    mlo3.AddConfig("LayerOptionsName", "AnalysisLayerOptions");
-            mlo3.AddConfig("DataSourceTypeName", "as_heightcontrol");
-            mlo3.AddConfig("Height", height); //高差
-            /////更新控高分析点坐标，当更新点时必须设置IsLoad配置项为true
-            layer.UpdateLayerOptions(mlo3); ////更新视域分析
+			var mlo3 = map.CreateLayerOptions("");
+			// mlo3.AddConfig("LayerOptionsName", "HeightControlOptions")
+		  // mlo3.AddConfig("Points",points);
+		  // mlo3.AddConfig("PointsIndex",pointsIndex);
+		  // mlo3.AddConfig("Height",height);
+		  // mlo3.AddConfig("IsLoad","true");		    
+			mlo3.AddConfig("LayerOptionsName", "AnalysisLayerOptions");
+			mlo3.AddConfig("DataSourceTypeName", "as_heightcontrol");
+			mlo3.AddConfig("Height", height); //高差
+			/////更新控高分析点坐标，当更新点时必须设置IsLoad配置项为true
+			layer.UpdateLayerOptions(mlo3); ////更新视域分析
 			
 			//var id = layer.GetLayerID();
-		   // map.UpdateAnalysis(id, mlo3);
-		   return layer;
+		  // map.UpdateAnalysis(id, mlo3);
+		  return layer;
 		},
 		/*获取控高分析的起始点坐标*/
 		"getHeightControlPos":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerOption();
@@ -980,8 +990,8 @@ var Map3D = CooMap.Class.extend({
 	    mlo3.AddConfig("HAngle",HAngle);
 	    mlo3.AddConfig("EyePos",EyePos);                                  //观察点坐标(起始点坐标)
 	    mlo3.AddConfig("ArmPos", ArmPos);                                 //目标点坐标(目标点坐标)   注意:这是场景坐标-2768163.3659590534,3196156.3096583206,-4767988.168168
-		mlo3.AddConfig("IsLoad", "true");
-		mlo3.AddConfig("IsActive", "false");
+		  mlo3.AddConfig("IsLoad", "true");
+		  mlo3.AddConfig("IsActive", "false");
 	    //mlo3.AddConfig("IsImmediateMode","true");
 	    mlo3.AddConfig("DrawLineColor","0,1,0,1");
 	    mlo3.AddConfig("DrawViewColor","1,0,0,1");
@@ -993,13 +1003,14 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*视域分析---老版本SDK支持*/
 		"updateViewShedAnalysis":function(layer,VAngle,HAngle,ArmPos){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerOption();
 			var eyePos = opt.GetConfigValueByKey("EyePos");                //获取观察点坐标(起始点坐标)
 
-			var mlo3 = map.CreateLayerOptions("")
+			var mlo3 = map.CreateLayerOptions("");
 			mlo3.AddConfig("LayerOptionsName", "AnalysisLayerOptions");
 			mlo3.AddConfig("VAngle", VAngle);
 			mlo3.AddConfig("HAngle", HAngle);
@@ -1009,11 +1020,11 @@ var Map3D = CooMap.Class.extend({
 			layer.UpdateLayerOptions(mlo3);
 		},
 		"sightAnalysis":function(VAngle,HAngle){
-			var mlo3 = map.CreateLayerOptions("")
+			var mlo3 = map.CreateLayerOptions("");
 		  mlo3.AddConfig("LayerOptionsName", "AnalysisLayerOptions"); ///视域分析必须设置为ViewShedAnalysisOptions
 		  mlo3.AddConfig("DataSourceTypeName", "as_viewshed");
-			mlo3.AddConfig("VAngle","60");
-			mlo3.AddConfig("HAngle","60");
+			mlo3.AddConfig("VAngle",VAngle);
+			mlo3.AddConfig("HAngle",HAngle);
 			// mlo3.AddConfig("IsImmediateMode","true");
 			mlo3.AddConfig("DrawLineColor","0,1,0,1");
 //			mlo3.AddConfig("DrawViewColor","1,0,0,1");
@@ -1034,22 +1045,24 @@ var Map3D = CooMap.Class.extend({
 //		},
 		/*获取视域分析的观察点坐标*/
 		"getViewShedPos":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:4 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerResult();
-			if(opt.GetConfigValueByKey("DataSourceTypeName") == "as_viewshed"){
+			if(opt.GetConfigValueByKey("DataSourceTypeName") === "as_viewshed"){
 				var eyePos = opt.GetConfigValueByKey("EyePoint");
 			}
 			return eyePos;
 		},
 		/*获取视域分析的目标点坐标*/
 		"getViewAimPos":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:4 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerResult();
-			if(opt.GetConfigValueByKey("DataSourceTypeName") == "as_viewshed"){
+			if(opt.GetConfigValueByKey("DataSourceTypeName") === "as_viewshed"){
 				var aimPos = opt.GetConfigValueByKey("AimPoint");
 			}
 			return aimPos;
@@ -1108,7 +1121,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*通视分析*/
 		"lineOfSight":function(){
-			var mlo3 = map.CreateLayerOptions("")
+			var mlo3 = map.CreateLayerOptions("");
         mlo3.AddConfig("LayerOptionsName", "AnalysisLayerOptions");    //通视分析必须设置为LineOfSightOptions
         mlo3.AddConfig("DataSourceTypeName", "as_linesight");
         mlo3.AddConfig("StartColor","0,0,1,1");
@@ -1128,11 +1141,12 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*更新通视分析*/
 		"updateLineOfSight":function(layer,statPos,endPos){
-			if(layer == null || layer == undefined){
+			/*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
-			var mlo3 = map.CreateLayerOptions("")
-			mlo3.AddConfig("LayerOptionsName", "LineOfSightOptions")
+			var mlo3 = map.CreateLayerOptions("");
+			mlo3.AddConfig("LayerOptionsName", "LineOfSightOptions");
 			mlo3.AddConfig("EndColor","1,0,1");
 			mlo3.AddConfig("HitColor","1,1,1");
 			mlo3.AddConfig("StartPoint",statPos);
@@ -1144,22 +1158,24 @@ var Map3D = CooMap.Class.extend({
 	
 		/*获取通视分析的观察点坐标*/
 		"getLineOfSightStartPos":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:4 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerResult();
-			if(opt.GetConfigValueByKey("DataSourceTypeName") == "as_linesight"){
+			if(opt.GetConfigValueByKey("DataSourceTypeName") === "as_linesight"){
 				var StartPoint = opt.GetConfigValueByKey("StartPoint");
 			}
 			return StartPoint;
 		},
 		/*获取通视分析的目标点坐标*/
 		"getLineOfSightEndPos":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:4 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var opt = layer.GetLayerResult();
-			if(opt.GetConfigValueByKey("DataSourceTypeName") == "as_linesight"){
+			if(opt.GetConfigValueByKey("DataSourceTypeName") === "as_linesight"){
 				var EndPoints = opt.GetConfigValueByKey("EndPoints");
 			}
 			return EndPoints;
@@ -1167,6 +1183,7 @@ var Map3D = CooMap.Class.extend({
 		
 		/*常用工具--坐标转换（经纬度转场景、场景转经纬度、屏幕转经纬度）、获取当前视点（经纬度、经纬度+旋转角）、获取SDK路径*/
 		"coordTransformation":function(type,opt){
+			/*jshint maxcomplexity:5 */
 			this.opt = opt;
 			var PosX = this.opt.posX;                                                   //场景坐标X
 			var PosY = this.opt.posY;                                                   //场景坐标Y
@@ -1177,18 +1194,18 @@ var Map3D = CooMap.Class.extend({
 			var ScreenX = this.opt.screenX;                                             //屏幕坐标X
 			var ScreenY = this.opt.screenY;                                             //屏幕坐标Y
 			var coordContent;
-			if(type == 1){//经纬度转场景坐标
+			if(type === 1){//经纬度转场景坐标
 				var positions = map.CreatePosition(lon,lat,height);                       //获取点对象
 				var convert = translate.ConvertLongLatHeightToXYZ(positions);
 				coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ()+";";
-			}else if(type == 2){//场景坐标转经纬度
+			}else if(type === 2){//场景坐标转经纬度
 				var positions = map.CreatePosition(PosX,PosY,PosZ);                       //获取点对象
 				var convert = translate.ConvertXYZToLongLatHeight(positions);
 			  coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ();
-			}else if(type == 3){                                                        //屏幕坐标转经纬度
+			}else if(type === 3){                                                        //屏幕坐标转经纬度
 				var convert = translate.ScreenPosToWorldPos(ScreenX,ScreenY);
 				coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ();
-			}else if(type == 4){                                                        //经纬度转屏幕坐标
+			}else if(type === 4){                                                        //经纬度转屏幕坐标
 				var positions = map.CreatePosition(lon,lat,height);
 			 	var sPos = translate.WorldPosToScreenPos(positions);
 			  coordContent = sPos.GetX()+","+sPos.GetY();
@@ -1239,6 +1256,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"createTextLabelLayer":function(opt){
+      /*jshint maxcomplexity:8 */
 			this.opt = opt;
 			var liftUp = this.opt.liftUp || "0";
 			var shpUrl = this.opt.shpUrl || "";
@@ -1502,6 +1520,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"addTextLabel":function(layer,name,Lon,Lat,Height){
+      /*jshint maxcomplexity:2 */
 			var Name = name || "default";
 			// 获取图层id
 	  	var id = layer.GetLayerID();
@@ -1539,6 +1558,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"updateTextLabel":function(oldLabel, layer, name, Lon, Lat, Height){
+      /*jshint maxcomplexity:2 */
 			var Name = name || "default";
 	  	var id = layer.GetLayerID();                                   //获取图层id
       var editLayer = map.GetFeatureModelLayer(id);                  //获取矢量图层
@@ -1558,6 +1578,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		//拾取更新文字标注
 		"pickUpdateTextLabel":function(opt){
+      /*jshint maxcomplexity:5 */
 			this.opt = opt;
 			var FeatureObj = this.opt.featureObj;
 			var content = FeatureObj.GetResponserResult();                //此处的layer是创建标注拾取响应器返回的layer
@@ -1607,6 +1628,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		//标注拾取后删除
 		"deleteLabelByPick":function(layer){
+      /*jshint maxcomplexity:3 */
 			//layer表示的是一个数组，用来存放不同类型的文字标注
 			var lay = "";
   		for(var i = 0;i<layer.length;i++){
@@ -1646,6 +1668,7 @@ var Map3D = CooMap.Class.extend({
     },
 		//创建一个图片标注图层
 		"createImageLabelLayer":function(opt){
+      /*jshint maxcomplexity:9 */
 			this.opt = opt;
 			var IconUrl = this.opt.iconUrl;
 			var LiftUp = this.opt.liftUp || 0;
@@ -1704,9 +1727,9 @@ var Map3D = CooMap.Class.extend({
       tlo.AddConfig("MaxRange", MaxRange);                                   //最大显示范围，大于最小显示范围-无穷大
       tlo.AddConfig("MinRange", "0");                                         //最小显示范围，0-无穷大
       /* 
-                            调度优先级 = priority * PriorityScale + PriorityOffset;
-                            其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点的距离、
-        LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
+        调度优先级 = priority * PriorityScale + PriorityOffset;
+				其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点
+				的距离、LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
        */
       // 结点调度优先级的缩放值PriorityScale,默认为1
       tlo.AddConfig("PriorityScale","1.0");
@@ -1719,6 +1742,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*创建图片标注*/
 		"addImageLabel":function(layer,imageValue,Lon,Lat,Height){
+      /*jshint maxcomplexity:2 */
 			var ImageValue = imageValue || "default";
       var id = layer.GetLayerID();                              //获取图层id
  	    var editLayer = map.GetFeatureModelLayer(id);             //获取矢量图层
@@ -1736,6 +1760,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*更新图片标注*/
 		"updateImageLabel":function(oldLabel, layer, imageValue, Lon, Lat, Height){
+      /*jshint maxcomplexity:2 */
 			var ImageValue = imageValue || "default";
       var id = layer.GetLayerID();                                                  //获取图层id
  	    var editLayer = map.GetFeatureModelLayer(id);                                 //获取矢量图层
@@ -1752,11 +1777,12 @@ var Map3D = CooMap.Class.extend({
 			return addFeature;
 		},
 		"pickUpdateImageLabel":function(opt){
+      /*jshint maxcomplexity:2 */
 			this.opt = opt;
 			var FeatureObj = this.opt.featureObj;
 			var content = FeatureObj.GetResponserResult();              //此处的layer是创建标注拾取响应器返回的layer
 			var OldLayer = this.opt.oldLayer;
-			var OldImageValue = content.GetConfigValueByKey("imagevalue");;
+			var OldImageValue = content.GetConfigValueByKey("imagevalue");
 			var OldLon = content.GetConfigValueByKey("lon");
 			var OldLat = content.GetConfigValueByKey("lat");
 			var OldHeight = content.GetConfigValueByKey("height");
@@ -1794,6 +1820,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*开启标注拾取*/
 		"labelPick":function(layer){
+      /*jshint maxcomplexity:2 */
 			var pOption = map.CreateResponserOptions("123");
 			var lay = "";
   		for(var i = 0;i<layer.length;i++){
@@ -1854,6 +1881,7 @@ var Map3D = CooMap.Class.extend({
 		},
 
 		addResForPoint:function(option,type){
+      /*jshint maxcomplexity:8 */
 			this.option = option;
 			var ModelUrl = this.option.modelUrl;//模型路径
 			var IconUrl = this.option.iconUrl;//图片路径
@@ -1864,7 +1892,7 @@ var Map3D = CooMap.Class.extend({
 			var pSymbol = map.CreateSymbol("PointSymbol"); ////创建类型为PointSymbol的符号，必须为PointSymbol字符串
 	    pSymbol.AddConfig("Size", "1"); ////点大小，范围0-10
 	    pSymbol.AddConfig("Color", "1.0,1.0,0.0,1.0"); ////颜色值0-1（RGBA），最后一位代表透明度，0为透明，1为不透
-	    if(type=="model"){
+	    if(type==="model"){
 		  	var tSymbol = map.CreateSymbol("ModelSymbol"); ////创建类型为ModelSymbol的符号，必须为ModelSymbol字符串
 		    tSymbol.AddConfig("Heading", "0"); ////绕Z轴(世界坐标系方向相同 far->near)旋转,从far(-Z)向near(+Z)看去,逆时针为正，弧度表示
 		    tSymbol.AddConfig("Pitch", "-0.8"); //////绕Y轴(世界坐标系方向相同 down(-Y)向up(Y))旋转,从down(-Y)向up(+Y)看去,逆时针为正，弧度表示
@@ -1893,7 +1921,7 @@ var Map3D = CooMap.Class.extend({
 		    styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
 		    styleSheet.AddResLib(reslib.GetConfig()); ////将资源库添加至样式表
 
-			}else if(type == "text"){
+			}else if(type === "text"){
 				var tSymbol = map.CreateSymbol("TextSymbol"); ////创建类型为TextSymbol的符号，必须为TextSymbol字符串
 	      tSymbol.AddConfig("FillingColor", "1.0, 1.0, 0.0, 1.0"); ////文字颜色（RGBA），颜色值0-1，最后一位代表透明度，0为透明，1为不透
 	      tSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.ttf"); ////文字字体，从系统字体目录中取，字体文件必须存在，配置一些参数时，如果没生效可能与字体文件相关，例如中文
@@ -1926,7 +1954,7 @@ var Map3D = CooMap.Class.extend({
 
 	      var styleSheet = map.CreateStyleSheet(); ////创建样式表
 	       styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
-			}else if(type == "icon"){
+			}else if(type === "icon"){
 				var tSymbol = map.CreateSymbol("IconSymbol"); ////创建类型为IconSymbol的符号，必须为IconSymbol字符串
 	      tSymbol.AddConfig("Align", "-5"); ////设置图片与要素的相对位置
 	      tSymbol.AddConfig("AxisAlignmentType", "0"); ////设置图片旋转模式
@@ -2010,6 +2038,7 @@ var Map3D = CooMap.Class.extend({
 				layer.AddFeature(addFeature);
 	    },
 		"addGraphics":function(type,opt){
+      /*jshint maxcomplexity:10 */
 			this.opt = opt;
 			var PointColor = this.opt.pointColor || "1, 0.8, 0.6,0.6";
 			var PointSize  = this.opt.pointSize || "0";
@@ -2034,7 +2063,7 @@ var Map3D = CooMap.Class.extend({
 	    mlo3.AddConfig("LineWidth", LineWidth);  //线宽
 	    mlo3.AddConfig("SplitPointNum", "40");
 	    mlo3.AddConfig("DrawType", String(type));//绘制图形
-	    if(PointSet != "" && PointSet != undefined){
+	    if(PointSet !== "" && PointSet !== undefined && PointSet !== null){
 	      mlo3.AddConfig("IsLoad", "true");//根据点集来画图
 		  mlo3.AddConfig("IsActive", "false");//设置为false停止响应鼠标
 	      mlo3.AddConfig("Points", PointSet);
@@ -2071,6 +2100,7 @@ var Map3D = CooMap.Class.extend({
 		 * @return { Object } 动画路径图层
 		 */
 		"createDynamicPath":function(opt){
+      /*jshint maxcomplexity:9 */
 			this.opt = opt;
 			var ModelUrl = this.opt.modelUrl;
 			var PlayMode = this.opt.playMode || "PLAYER_ONEWAY";
@@ -2129,6 +2159,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*更新动画路径*/
 		"updateDynamicPath":function(opt){
+      /*jshint maxcomplexity:15 */
 			this.opt = opt;
 			var PathLayer = this.opt.pathLayer;
 			var ModelUrl = this.opt.modelUrl || null;
@@ -2141,35 +2172,36 @@ var Map3D = CooMap.Class.extend({
 
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");/////////创建更新的配置参数
 	    tlo.AddConfig("LayerOptionsName", "DynamicPathLayerOptions");
-	    if(ModelUrl != null && ModelUrl != undefined){
+	    if(ModelUrl !== null && ModelUrl !== undefined){
 	    	tlo.AddConfig("Url", ModelUrl);
 	    }
-	    if(PlayMode != "" && PlayMode != undefined){
+	    if(PlayMode !== "" && PlayMode !== undefined){
 	    	tlo.AddConfig("PlayerMode", PlayMode);//播放模式 有一次性播放"PLAYER_ONEWAY" 循环一次播放"PLAYER_ONEWAY_LOOP" 往返播放"PLAYER_ROUND_LOOP"
 	    }
-	    if(ViewObject != "" && ViewObject != undefined){
+	    if(ViewObject !== "" && ViewObject !== undefined){
 	    	tlo.AddConfig("ViewObjectMode", ViewObject);//视角对象;视角对象的格式为"1.57,-0.708,100",第一个为视角方位角,第二个为视角俯仰角，第三个为视点到关键点距离
 	    }
-	    if(CoordStr != "" && CoordStr != undefined){
+	    if(CoordStr !== "" && CoordStr !== undefined){
 	    	tlo.AddConfig("KeyPoints",CoordStr);
 	    }
-	    if(PathWidth != "" && PathWidth != undefined){
+	    if(PathWidth !== "" && PathWidth !== undefined){
 	    	tlo.AddConfig("LineWidth",PathWidth);
 	    }
-	    if(PathColor != "" && PathColor != undefined){
+	    if(PathColor !== "" && PathColor !== undefined){
 	    	tlo.AddConfig("LineColor", PathColor);
 	    }
-	    if(Speed != "" && Speed != undefined){
+	    if(Speed !== "" && Speed !== undefined){
 	    	tlo.AddConfig("Velocity", Speed);
 	    }
 	    PathLayer.UpdateLayerOptions(tlo);
 		},
 		"operateDynamicPath":function(layer,opt){
+      /*jshint maxcomplexity:4 */
 			this.opt = opt;
 			var PlayState = this.opt.playState;
 			var FollowState = this.opt.followState || "false";
 			/*播放--PLAYER_PLAY   暂停---PLAYER_PAUSE    停止---PLAYER_STOP*/
-			if(layer == null || layer == undefined){
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -2179,7 +2211,8 @@ var Map3D = CooMap.Class.extend({
 	    layer.UpdateLayerOptions(tlo);
 		},
 		"controlDynamicSpeed":function(layer,speed){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -2188,7 +2221,8 @@ var Map3D = CooMap.Class.extend({
 	    layer.UpdateLayerOptions(tlo);
 		},
 		"addDynamicFollow":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -2197,7 +2231,8 @@ var Map3D = CooMap.Class.extend({
 	    layer.UpdateLayerOptions(tlo);
 		},
 		"cancelDynamicFollow":function(layer){
-			if(layer == null || layer == undefined){
+      /*jshint maxcomplexity:3 */
+			if(layer === null || layer === undefined){
 				return;
 			}
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
@@ -2271,6 +2306,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*截图*/
 		"imageCut":function(savePath,imageName,imageMultiple){
+      /*jshint maxcomplexity:2 */
 			if(imageCutIndex>1){
 				map.RemoveResponser("SceneshotResponser");
 			}
@@ -2298,6 +2334,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*添加网页弹出框*/
 		"showWegdit":function(opt){
+      /*jshint maxcomplexity:4 */
 			this.opt = opt;
 			var positions = this.opt.position || "0.0,0.0,0.0";
 			var width = this.opt.width || 300;
@@ -2321,7 +2358,8 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*加载道路WFS服务*/
 		"loadWFS":function(wfsUrl,layeName,fieldName){
-			if(fieldName == ""){
+      /*jshint maxcomplexity:2 */
+			if(fieldName === ""){
             fieldName = "name";
 			}
 		  var lSymbol = map.CreateSymbol("LineSymbol");
@@ -2451,32 +2489,37 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*获取播放路径关键点*/
 		"CalcBuffer":function(pos,keyPos){
+			/*jshint maxcomplexity:2 */
 			var buffer = 0.5;
 			var mPos = pos.split(',');
 			var tmp = keyPos.substring(0, keyPos.length - 1);
 			var mKeyPos = tmp.split(',');
 
-			var dis = (mPos[0] * 1 - mKeyPos[0] * 1) * (mPos[0] * 1 - mKeyPos[0] * 1)
-			      + (mPos[1] * 1 - mKeyPos[1]) * (mPos[1] * 1 - mKeyPos[1])
-			      + (mPos[2] * 1 - mKeyPos[2]) * (mPos[2] * 1 - mKeyPos[2]);
-		  if(dis < buffer * buffer)
+			var dis = (mPos[0] * 1 - mKeyPos[0] * 1) * 
+				(mPos[0] * 1 - mKeyPos[0] * 1) + (mPos[1] * 1 - mKeyPos[1]) * 
+				(mPos[1] * 1 - mKeyPos[1]) + (mPos[2] * 1 - mKeyPos[2]) * 
+				(mPos[2] * 1 - mKeyPos[2]);
+		  if(dis < buffer * buffer){
 		    return true;
-		  return false
+			}
+		  return false;
 		},
 		/*检查现在位置是否是目标点*/
 		"checkPosi":function(currentPosi,targetPosi){
+			/*jshint maxcomplexity:2 */
 			var buffer = 13;
 			var mPos = currentPosi.split(',');
 			var positions = targetPosi.split(',');
 			var mKeyPos = map.CreatePosition(positions[0],positions[1],positions[2]);//获取点对象
 			var convert = translate.ConvertLongLatHeightToXYZ(mKeyPos);
-			var dis = (mPos[0] * 1 - convert.GetX() * 1) * (mPos[0] * 1 - convert.GetX() * 1)
-			      + (mPos[1] * 1 - convert.GetY()) * (mPos[1] * 1 - convert.GetY())
-			      + (mPos[2] * 1 - convert.GetZ()) * (mPos[2] * 1 - convert.GetZ());
+			var dis = (mPos[0] * 1 - convert.GetX() * 1) * 
+				(mPos[0] * 1 - convert.GetX() * 1) + (mPos[1] * 1 - convert.GetY()) * 
+				(mPos[1] * 1 - convert.GetY()) + (mPos[2] * 1 - convert.GetZ()) * 
+				(mPos[2] * 1 - convert.GetZ());
 		  if(dis < buffer * buffer){
 		    return true;
 		  }
-		  return false
+		  return false;
 		},
 		/*添加罗盘响应器*/
 		"addCompass":function(){
@@ -3100,6 +3143,7 @@ var Map3D = CooMap.Class.extend({
       return themePointLayer;
     },
     "addHotPoint":function(layer,opt){
+			/* jshint maxcomplexity:2 */
     	this.opt = opt;
       var Lon = this.opt.lon;
 			var Lat = this.opt.lat;
@@ -3119,6 +3163,7 @@ var Map3D = CooMap.Class.extend({
     },
     //漫游快捷键配置
 		"shortcutKey":function(opt){
+			/*jshint maxcomplexity:21 */
 			this.opt = opt;
 			var WalkOn = this.opt.walkOn || "w";
 			var WalkBack = this.opt.walkBack || "s";
@@ -3236,6 +3281,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*根据图层id高亮整个图层*/
 		"highLightLayerOperate":function(opt){
+			/*jshint maxcomplexity:4 */
 			this.opt = opt;
 			var OperateLayer = this.opt.operateLayer;
 			var LightState = this.opt.lightState || "false";
@@ -3264,6 +3310,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"createFire":function(opt){
+			/*jshint maxcomplexity:2 */
 			this.opt = opt;
 			var ScreenX = this.opt.screenX;
 			var ScreenY = this.opt.screenY;
@@ -3607,6 +3654,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"createFountain":function(opt){
+			/*jshint maxcomplexity:2 */
 			this.opt = opt;
 			var ScreenX = this.opt.screenX;
 			var ScreenY = this.opt.screenY;
@@ -3783,6 +3831,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"createHydraulicGiant":function(opt){
+			/*jshint maxcomplexity:4 */
 			this.opt = opt;
 			var StartPointLon = this.opt.startPointLon;
 			var StartPointLat = this.opt.startPointLat;
@@ -3886,7 +3935,7 @@ var Map3D = CooMap.Class.extend({
       // 计算投影坐标单位向量
       var PlaneDirectVec = null;
 			var vector = "0,0,0";
-      if("wall" == Baffle){
+      if("wall" === Baffle){
 				var startPlaneDirectPos = translate.ConvertLongLatHeightToXYZ(
 					map.CreatePosition(StartPointLon, StartPointLat, 0));
 				var endPlaneDirectPos = translate.ConvertLongLatHeightToXYZ(
@@ -3899,7 +3948,7 @@ var Map3D = CooMap.Class.extend({
 				var yVector = -yCoordinate;
 				var zVector = -zCoordinate;
 				vector = xVector + "," + yVector + "," + zVector;
-			}else if("floor" == Baffle){
+			}else if("floor" === Baffle){
 				var PlaneDirectPos = translate.ConvertLongLatHeightToXYZ(
 					map.CreatePosition(EndPointLon, EndPointLat, 0));
 				PlaneDirectVec = map3D.normalize(PlaneDirectPos.GetX(),
@@ -3970,17 +4019,18 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*水雾效果*/
 		"setFog":function(opt){
+			/*jshint maxcomplexity:4 */
 			this.opt = opt;
 			var FogStatus = this.opt.fogStatus; //雾霾开启状态，true开启，false关闭
 			var FogColor = this.opt.fogColor; //雾霾颜色
 			var FogDensity = this.opt.fogDensity; //雾霾浓度
-			if(String(FogStatus) != "" && FogStatus != undefined){
+			if(String(FogStatus) !== "" && FogStatus !== undefined){
 				map.SetParame("FogEnable", FogStatus);
 			}
-			if(FogColor != "" && FogColor != undefined){
+			if(FogColor !== "" && FogColor !== undefined){
 			  map.SetParame("FogColor", FogColor);
 			}
-			if(FogDensity != "" && FogDensity != undefined){
+			if(FogDensity !== "" && FogDensity !== undefined){
 				map.SetParame("FogDensity", FogDensity);
 			}
 		},
@@ -4008,6 +4058,7 @@ var Map3D = CooMap.Class.extend({
 			return tmp / (vec1 * vec2);
 		},
 		"addEvent":function(name, func){
+			/*jshint maxcomplexity:3 */
 			if(content3d.attachEvent){
 				content3d.attachEvent(name, func);
 			}else if(content3d.addEventListener){
@@ -4017,6 +4068,7 @@ var Map3D = CooMap.Class.extend({
 			}
 	  },
 	  "delEvent":function(name, func){
+			/*jshint maxcomplexity:3 */
 			if(content3d.detachEvent){
 				content3d.detachEvent(name, func);
 		  }else if(content3d.removeEventListener){
@@ -4091,6 +4143,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"operateVideoArea":function(layer,opt){
+			/*jshint maxcomplexity:9 */
 			this.opt = opt;
 			var id = this.opt.id;
 			var type= this.opt.type;
@@ -4153,6 +4206,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.7
 		 */
 		"rotateMode":function(opt){
+			/*jshint maxcomplexity:5 */
 			this.opt = opt;
 			var RotateState = this.opt.rotateState || false;
 			var PitchAngle = this.opt.pitchAngle || 0;
@@ -4187,12 +4241,13 @@ var Map3D = CooMap.Class.extend({
      * @return { Object } 图层对象
      */
     "loadC3SNEW":function(ip,port,type,serverName,ToolsObject) {
+			/*jshint maxcomplexity:5 */
       var tools = content3d.GetIToolsCOMPtr();
 			var parseLayerTool;
-		  if (null != tools) {
+		  if (null !== tools) {
         // 工具配置选项
         var tlo = tools.CreateToolsOptions("ToolsOption");
-        if (null != tlo) {
+        if (null !== tlo) {
           // 服务ip
           tlo.AddConfig("Url", ip);
            // 服务端口
@@ -4207,7 +4262,7 @@ var Map3D = CooMap.Class.extend({
           tlo.AddConfig("ServerName", serverName);
           // 创建的加载对象类名，不可任意更改
           var parseLayerTool = tools.CreateToolsObject(ToolsObject, tlo);
-          if (null != parseLayerTool) {
+          if (null !== parseLayerTool) {
             //激活加载工具
             var res = tools.ActiveTools(parseLayerTool);
             //销毁加载工具 -->
@@ -4227,6 +4282,7 @@ var Map3D = CooMap.Class.extend({
      * @return { Null }
      */
     "showC3S":function(parseLayerTool) {
+			/*jshint maxcomplexity:2 */
       if(parseLayerTool){
 				var tools = content3d.GetIToolsCOMPtr();
         // 工具配置项
@@ -4245,15 +4301,16 @@ var Map3D = CooMap.Class.extend({
      * @return { Null }
      */
     "hideC3S": function(parseLayerTool){
+			/*jshint maxcomplexity:2 */
       if(parseLayerTool){
-		var tools = content3d.GetIToolsCOMPtr();
+		    var tools = content3d.GetIToolsCOMPtr();
         //工具配置项
-		var mlo = tools.CreateToolsOptions("ToolsOption");
+		    var mlo = tools.CreateToolsOptions("ToolsOption");
         // 显隐标志设置，0 隐藏， 1，显示（字符串）
         mlo.AddConfig("Visible", "0");
         // 更新配置项
         parseLayerTool.UpdateToolsOption(mlo);
-	  }
+	    }
     },
     /**
      * 获取视点，更精确
@@ -4267,6 +4324,7 @@ var Map3D = CooMap.Class.extend({
     },
     //矢量挤压
     "createExtrudeShp":function(opt){
+			/*jshint maxcomplexity:8 */
       this.opt = opt;
       var iconUrl = this.opt.iconUrl;//压缩的图片路径，网络的或服务的
       var leftUp = this.opt.leftUp || 0.5;
@@ -4304,13 +4362,19 @@ var Map3D = CooMap.Class.extend({
       var lStyle = map.CreateStyle("polygonStyle");   
       // 将符号配置添加到该样式，第一参必须为PolygonSymbol字符串
       lStyle.AddSymbol("PolygonSymbol", polygonSymbol.GetConfig());       
-      // 创建类型为LineExtrusionSymbol的符号,为线挤出符号，必须为LineExtrusionSymbol字符串
+			/* 
+			  创建类型为LineExtrusionSymbol的符号,为线挤出符号，
+				必须为LineExtrusionSymbol字符串
+			 */
       var extruSymbol = map.CreateSymbol("LineExtrusionSymbol"); 
       // 是否使用套接样式
       extruSymbol.AddConfig("Casing", "false"); 
       // 是否使用默认流向(从起点流向终点)
       extruSymbol.AddConfig("CurrentDirection", "true"); 
-      // 剖面多边形的顶点数,近似圆周circular(8 or 16，set nlExtrusion->Casing() = true),正方形rectangular(4),带有方向纹理(2);
+			/* 
+				剖面多边形的顶点数,近似圆周circular(8 or 16，set nlExtrusion->Casing() = 
+				true),正方形rectangular(4),带有方向纹理(2);
+			 */
       extruSymbol.AddConfig("SplitPointNum", "2"); 
       // 剖面多边形的起点顶点的旋转角度(与局部x轴)，radian
       extruSymbol.AddConfig("Angle", "0"); 
@@ -4357,9 +4421,9 @@ var Map3D = CooMap.Class.extend({
       // 绘制顺序
       tlo.AddConfig("RenderOrder", "-200"); 
       /* 
-                            调度优先级 = priority * PriorityScale + PriorityOffset;
-                            其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点的距离、
-        LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
+        调度优先级 = priority * PriorityScale + PriorityOffset;
+				其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点
+				的距离、LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
        */
       // 结点调度优先级的缩放值PriorityScale,默认为1
       tlo.AddConfig("PriorityScale","1.0");
@@ -4368,7 +4432,7 @@ var Map3D = CooMap.Class.extend({
       // 将样式表配置添加至图层配置对象，第一参必须为StyleSheet字符串
       tlo.AddConfig("StyleSheet", styleSheet.GetConfig()); 
 
-      if(type == 1){
+      if(type === 1){
         var shpUrl = this.opt.shpUrl;
         // 数据存放位置，注意双斜杠
         tlo.AddConfig("Url", shpUrl);       
@@ -4377,7 +4441,7 @@ var Map3D = CooMap.Class.extend({
       var exlineshpLayer = map.CreateLayer("FeatureModelLayer", tlo); 
       // 添加矢量图层
       map.AddLayer(exlineshpLayer); 
-      if(type == 2){
+      if(type === 2){
         // point是数组格式的
         var points = this.opt.points||"";
         // 获取图层id
@@ -4411,6 +4475,7 @@ var Map3D = CooMap.Class.extend({
      * @return { Number } lineLength 路线的长度
      */
     "getLineLength": function(points) {
+			/*jshint maxcomplexity:3 */
       var lineLength = 0;
       var pointSet = points.split(";");
       var coorXYZ = [];
@@ -4448,6 +4513,7 @@ var Map3D = CooMap.Class.extend({
      * @return { Object } exlineshpLayer 矢量图层
      */
     "createPlotLayer": function(opt) {
+			/*jshint maxcomplexity: 6 */
       this.opt = opt;
       // 压缩的图片路径，网络的或服务的
       var iconUrl = this.opt.iconUrl; 
@@ -4492,7 +4558,10 @@ var Map3D = CooMap.Class.extend({
       extruSymbol.AddConfig("Casing", "false"); 
       // 是否使用默认流向(从起点流向终点)
       extruSymbol.AddConfig("CurrentDirection", "true"); 
-      // 剖面多边形的顶点数,近似圆周circular(8 or 16，set nlExtrusion->Casing() = true),正方形rectangular(4),带有方向纹理(2);
+			/*
+			  剖面多边形的顶点数,近似圆周circular(8 or 16，set nlExtrusion->Casing() = 
+			  true),正方形rectangular(4),带有方向纹理(2)
+			 */
       extruSymbol.AddConfig("SplitPointNum", "2"); 
       // 剖面多边形的起点顶点的旋转角度(与局部x轴)，radian
       extruSymbol.AddConfig("Angle", "0"); 
@@ -4539,9 +4608,9 @@ var Map3D = CooMap.Class.extend({
       // 绘制顺序
       tlo.AddConfig("RenderOrder", "-200"); 
       /* 
-                            调度优先级 = priority * PriorityScale + PriorityOffset;
-                            其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点的距离、
-        LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
+        调度优先级 = priority * PriorityScale + PriorityOffset;
+				其中priority由vp根据PagedNode结点的范围(minExtent, maxExtent)、其距离视点
+				的距离、LOD层级mLODScale计算得到， 调度优先级越大，优先调度并显示 
        */
       // 结点调度优先级的缩放值PriorityScale,默认为1
       tlo.AddConfig("PriorityScale","1.0");
@@ -4550,7 +4619,7 @@ var Map3D = CooMap.Class.extend({
       // 将样式表配置添加至图层配置对象，第一参必须为StyleSheet字符串
       tlo.AddConfig("StyleSheet", styleSheet.GetConfig()); 
 
-      if(shpUrl != ""){
+      if(shpUrl !== ""){
         // 数据存放位置，注意双斜杠
         tlo.AddConfig("Url", shpUrl);       
       }
@@ -4573,7 +4642,8 @@ var Map3D = CooMap.Class.extend({
       // 创建子几何类型（当GeometryType为5时生效）
       for(var i = 0; i < pointArr.length; i++){
         var result = pointArr[i];
-        addFeature.AddPoint(result.split(",")[0],result.split(",")[1],result.split(",")[2]);
+				addFeature.AddPoint(result.split(",")[0], result.split(",")[1], 
+				  result.split(",")[2]);
       }
       layer.AddFeature(addFeature); 
       return addFeature;
@@ -4665,6 +4735,128 @@ var Map3D = CooMap.Class.extend({
       // 页面高度		
 			opt.AddConfig("FunctionParam", param);														
 			obj.UpdateToolsOption(opt);
+		},
+		/**
+		 * 创建动态窗口
+		 * @method createWget
+		 * @author jg
+		 * @param 
+		 * @return { Object }
+		 * @version v6.0.8
+		 */
+		"createWget": function(opt) {
+			/*jshint maxcomplexity: 10 */
+			this.opt = opt;
+			var Lon = this.opt.lon;
+			var Lat = this.opt.lat;
+			var Height = this.opt.height;
+			var WinWidth = this.opt.winWidth;
+			var WinHeight = this.opt.winHeight;
+			var ArrowSize = this.opt.arrowSize || "30";
+			var Radial = this.opt.radial || "20";
+			var Url = this.opt.url;
+			var CloseButton = this.opt.closeButton || "true";
+			var ArrowColor = this.opt.arrowColor || "65,177,255";
+			var CloseButtonX = this.opt.closeButtonX || "365";
+			var CloseButtonY = this.opt.closeButtonY || "10";
+			var CloseButtonW = this.opt.closeButtonW || "20";
+			var CloseButtonH = this.opt.closeButtonH || "20";
+			var Param = this.opt.param || "";
+
+      var path = content3d.GetSDKPath().replace("\\bin","");
+      // 关闭按钮图片路径
+      var dataPath = path + "\\data\\texture\\close.bmp";		
+		  // 创建响应器配置项
+			var pOption = map.CreateResponserOptions("123");									
+      // 指向经纬度坐标经度
+			pOption.AddConfig("Longitude", Lon);								
+      // 指向经纬度坐标维度
+			pOption.AddConfig("Latitude", Lat);								
+      // 指向经纬度坐标高度
+			pOption.AddConfig("PosHeight", Height);												
+      // 窗口宽度
+			pOption.AddConfig("Widget", WinWidth);													
+      // 窗口高度
+			pOption.AddConfig("Height", WinHeight);													
+      // 箭头大小
+			pOption.AddConfig("ArrowSize", ArrowSize);												
+      // 圆角直径
+			pOption.AddConfig("Radial", Radial);													
+      // 指向网页url
+			pOption.AddConfig("Url", Url);	
+      // 坐标更新帧率
+			pOption.AddConfig("MoveDelay", "1");												
+      // 是否显示关闭按钮
+			pOption.AddConfig("CloseButtonState", CloseButton);										
+      // 关闭按钮图片路径
+			pOption.AddConfig("CloseButtonUrl", dataPath);										
+      // 箭头背景颜色
+			pOption.AddConfig("BKColor", ArrowColor);											
+			// 关闭按钮所在窗口x位置
+			pOption.AddConfig("CloseBtnPosX", CloseButtonX);											
+      // 关闭按钮所在窗口y位置
+			pOption.AddConfig("CloseBtnPosY", CloseButtonY);											
+      // 关闭按钮宽度
+			pOption.AddConfig("CloseBtnPosW", CloseButtonW);											
+      // 关闭按钮高度
+			pOption.AddConfig("CloseBtnPosH", CloseButtonH);											
+	    // 函数名
+			pOption.AddConfig("FunctionName", "Test");										
+      // 函数参数
+			pOption.AddConfig("FunctionParam", Param);											
+			// 创建响应器
+			var webResp  = map.CreateResponser("TipsDialogResponser", pOption);						
+			webResp.AddObserver();
+      // 响应器添加至场景
+			map.AddResponser(webResp);			
+			return webResp;												
+		},
+		/**
+		 * 移除动态窗口
+		 * @method removeWget
+		 * @author jg
+		 * @return { Null }
+		 * @version v6.0.8
+		 */
+		"removeWget": function() {
+      // 移除响应器
+      map.RemoveResponser("TipsDialogResponser");												
+		},
+		/**
+		 * 更新弹出框信息
+		 * @method updateWget
+		 * @author jg
+		 * @param { Object } winObj 窗口对象
+		 * @param { String } param 参数
+		 * @return { Null }
+		 * @version v6.0.8
+		 */
+		"updateWget": function(winObj, param) {
+      // 创建响应器配置项
+			var pOption = map.CreateResponserOptions("123");									
+			// 函数名
+			pOption.AddConfig("FunctionName", "Test");											
+      // 函数参数
+			pOption.AddConfig("FunctionParam", param);											
+      // 创建响应器
+			winObj.UpdateResponserOptions(pOption);
+		},
+		/**
+		 * 显隐动态窗口
+		 * @method visibleWget
+		 * @author jg
+		 * @param { Object } winObj 窗口对象
+		 * @param { Number } state 显隐状态，1为显示，0为隐藏
+		 * @return { Null }
+		 * @version v6.0.8
+		 */
+		"visibleWget": function(winObj, state) {
+      // 创建响应器配置项
+			var pOption = map.CreateResponserOptions("123");										
+			// 配置响应器显隐状态
+			pOption.AddConfig("Visible", state);											
+      // 更新相应器操作
+			winObj.UpdateResponserOptions(pOption);
 		}
 });
 
