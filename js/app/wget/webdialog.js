@@ -19,5 +19,5 @@ define([
     createWeb : createWeb,
     removeWeb : removeWeb,
     updateWeb : updateWeb
-  }
+  };
 });

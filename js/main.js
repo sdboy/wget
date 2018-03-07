@@ -13,7 +13,8 @@ require.config({
     Util : "lib/coorun/Util",
     webdialog : "app/wget/webdialog",
     wget : "app/wget/wget",
-    event : "app/wget/event"
+    event : "app/wget/event",
+    loadGMS : "app/loadModel/loadGMS"
   },
   shim: {
     'BMap': {
@@ -35,6 +36,15 @@ require([
   ], function(require, doc, init) {
   init.initialize("map");
   var map = init.map.mapObj;
+  var SDKpath = init.map.SDKpath;
+  require([
+    "loadGMS"
+    ], function (loadGMS) {
+    var model = loadGMS.loadBuild(map, "http://192.168.10.34:9502/HaiKang", 
+      "HaiKang_Compressed");
+    map.flyPosition(120.2161886949898, 30.21208647541144, 63.70232508983463,
+      4.351113551310101, -0.6722756375833641, 528.9511815746299, 3);
+  });
   require([
     "webdialog"
     ], function(webdialog) {
@@ -70,10 +80,8 @@ require([
       });
   });
   require([
-    "wget",
     "event"
-    ], function (wget, event) {
-      var winObj = [];
+    ], function (event) {
       $("#createWin").click(function () {
         event.setParam(map, {
           "winWidth" : "50",
@@ -91,14 +99,13 @@ require([
         });
       });
       $("#removeWin").click(function () {
-
+        event.removeWin();
       });
       $("#updateWin").click(function () {
-
+        event.updateWin("kkkkk");
       });
       $("#visiableWin").click(function () {
-
+        event.visiableWin();
       });
-      ;
     });
 });

@@ -19,7 +19,20 @@ define([
       closeButtonH : "",
       param : "",
     };
-    var result = {};
+    var result = {
+      winObj : []
+    };
+    var flag = {
+      flag : true
+    };
+    /**
+     * 获取屏幕的x,y坐标，创建动态框
+     * @method getPos
+     * @author jg
+     * @param { Number } x 屏幕x 
+     * @param { Number } y 屏幕y
+     * @return { Null }
+     */
     var getPos = function (x, y) {
       /*jshint maxcomplexity: 2 */
       if(param.map){
@@ -27,7 +40,7 @@ define([
           screenX : x,
           screenY : y
         });
-        param.fun.createWindow(param.map, {
+        var obj = param.fun.createWindow(param.map, {
           lon : pos.split(",")[0],
           lat : pos.split(",")[1],
           height : pos.split(",")[2],
@@ -36,16 +49,26 @@ define([
           arrowSize : param.arrowSize,
           radial : param.radial,
           url : param.url,
-          closeButton : "true",
-          arrowColor : "65, 177, 255",
-          closeButtonX : "30",
-          closeButtonY : "10",
-          closeButtonW : "20",
-          closeButtonH : "20",
-          param : "kkkkk"
+          closeButton : param.closeButton,
+          arrowColor : param.arrowColor,
+          closeButtonX : param.closeButtonX,
+          closeButtonY : param.closeButtonY,
+          closeButtonW : param.closeButtonW,
+          closeButtonH : param.closeButtonH,
+          param : param.param
         });
+        result.winObj.unshift(obj);
       }
+      param.map.delEvent("FireOnLButtonUp", getPos);
     };
+    /**
+     * 设置创建动态框的参数，添加地图左键点击监听
+     * @method setParam
+     * @author jg
+     * @param { Object } map 地图对象 
+     * @param { Object } opt 参数对象
+     * @return { Null }
+     */
     var setParam = function(map, opt) {
       param.map = map;
       param.winWidth = opt.winWidth;
@@ -63,9 +86,39 @@ define([
       map.addEvent("FireOnLButtonUp", getPos);
     };
     
+    var removeWin = function () {
+      /*jshint maxcomplexity:2 */
+      if(result.winObj.length > 0){
+        param.map.removeWget();
+      }
+    };
+
+    var updateWin = function (para) {
+      /*jshint maxcomplexity:2 */
+      if(result.winObj.length > 0){
+        param.map.updateWget(result.winObj[0], para);
+      }
+    };
+
+    var visiableWin = function () {
+      /*jshint maxcomplexity:3 */
+      if(result.winObj.length > 0){
+        if(flag.flag){
+          param.map.visiableWget(result.winObj[0], 0);
+          flag.flag = !flag.flag;
+        }else{
+          param.map.visiableWget(result.winObj[0], 1);
+          flag.flag = !flag.flag;
+        }
+      }
+    };
+    
     return {
       setParam : setParam,
       getPos : getPos,
-      result : result
-    }
+      result : result,
+      removeWin : removeWin,
+      updateWin : updateWin,
+      visiableWin : visiableWin
+    };
 });
