@@ -90,24 +90,32 @@ define([
       /*jshint maxcomplexity:2 */
       if(result.winObj.length > 0){
         param.map.removeWget();
+        result.winObj.pop();
       }
     };
 
-    var updateWin = function (para) {
+    var updateWin = function (opt) {
       /*jshint maxcomplexity:2 */
       if(result.winObj.length > 0){
-        param.map.updateWget(result.winObj[0], para);
+        param.map.updateWget(result.winObj[0], opt);
       }
     };
 
-    var visiableWin = function () {
+    var getParam = function (param) {
+      /*jshint maxcomplexity:2 */
+      if(result.winObj.length > 0){
+        param.map.WgetParam(result.winObj[0], param);
+      }     
+    };
+
+    var visibleWin = function () {
       /*jshint maxcomplexity:3 */
       if(result.winObj.length > 0){
         if(flag.flag){
-          param.map.visiableWget(result.winObj[0], 0);
+          param.map.visibleWget(result.winObj[0], 0);
           flag.flag = !flag.flag;
         }else{
-          param.map.visiableWget(result.winObj[0], 1);
+          param.map.visibleWget(result.winObj[0], 1);
           flag.flag = !flag.flag;
         }
       }
@@ -119,6 +127,7 @@ define([
       result : result,
       removeWin : removeWin,
       updateWin : updateWin,
-      visiableWin : visiableWin
+      visibleWin : visibleWin,
+      getParam : getParam
     };
 });

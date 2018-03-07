@@ -84,14 +84,14 @@ require([
     ], function (event) {
       $("#createWin").click(function () {
         event.setParam(map, {
-          "winWidth" : "50",
-          "winHeight" : "50",
+          "winWidth" : "395",
+          "winHeight" : "240",
           "arrowSize" : "30",
           "radial" : "20",
-          "url" : "http://github.com",
+          "url" : "http://baidu.com",
           "closeButton" : "true",
           "arrowColor" : "65, 177, 255",
-          "closeButtonX" : "30",
+          "closeButtonX" : "365",
           "closeButtonY" : "10",
           "closeButtonW" : "20",
           "closeButtonH" : "20",
@@ -102,10 +102,15 @@ require([
         event.removeWin();
       });
       $("#updateWin").click(function () {
-        event.updateWin("kkkkk");
+        event.updateWin({
+          "winWidth" : "120"
+        });
       });
-      $("#visiableWin").click(function () {
-        event.visiableWin();
+      $("#getParam").click(function () {
+        event.getParam("kkkkk");
+      });
+      $("#visibleWin").click(function () {
+        event.visibleWin();
       });
     });
 });

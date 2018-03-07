@@ -4740,7 +4740,21 @@ var Map3D = CooMap.Class.extend({
 		 * 创建动态窗口
 		 * @method createWget
 		 * @author jg
-		 * @param 
+		 * @param { Object } winObj 动态窗口对象
+		 * @param { String } lon 经度
+		 * @param { String } lat 纬度
+		 * @param { String } height 高度
+		 * @param { String } winWidth 窗口宽度
+		 * @param { String } winHeight 窗口高度
+		 * @param { String } arrowSize 箭头大小
+		 * @param { String } radial 圆角半径
+		 * @param { String } url 窗口包含的内容
+		 * @param { String } closeButton 是否显示关闭按钮，"true"显示，"false"不显示
+		 * @param { String } arrowColor 箭头颜色
+		 * @param { String } closeButtonX 关闭按钮在窗口中的x坐标
+		 * @param { String } closeButtonY 关闭按钮在窗口中的y坐标
+		 * @param { String } closeButtonW 关闭按钮的宽
+		 * @param { String } closeButtonH 关闭按钮的高度
 		 * @return { Object }
 		 * @version v6.0.8
 		 */
@@ -4823,7 +4837,111 @@ var Map3D = CooMap.Class.extend({
       map.RemoveResponser("TipsDialogResponser");												
 		},
 		/**
-		 * 更新弹出框信息
+		 * 更新动态窗口对象
+		 * @method updateWget
+		 * @author jg
+		 * @param { Object } winObj 动态窗口对象
+		 * @param { String } lon 经度
+		 * @param { String } lat 纬度
+		 * @param { String } height 高度
+		 * @param { String } winWidth 窗口宽度
+		 * @param { String } winHeight 窗口高度
+		 * @param { String } arrowSize 箭头大小
+		 * @param { String } radial 圆角半径
+		 * @param { String } url 窗口包含的内容
+		 * @param { String } closeButton 是否显示关闭按钮，"true"显示，"false"不显示
+		 * @param { String } arrowColor 箭头颜色
+		 * @param { String } closeButtonX 关闭按钮在窗口中的x坐标
+		 * @param { String } closeButtonY 关闭按钮在窗口中的y坐标
+		 * @param { String } closeButtonW 关闭按钮的宽
+		 * @param { String } closeButtonH 关闭按钮的高度
+		 * @return { Null }
+		 * @version v6.0.8
+		 */
+		"updateWget": function (winObj, opt) {
+			/*jshint maxcomplexity:15 */
+			this.opt = opt;
+			var Lon = this.opt.lon;
+			var Lat = this.opt.lat;
+			var Height = this.opt.height;
+			var WinWidth = this.opt.winWidth;
+			var WinHeight = this.opt.winHeight;
+			var ArrowSize = this.opt.arrowSize;
+			var Radial = this.opt.radial;
+			var Url = this.opt.url;
+			var CloseButton = this.opt.closeButton;
+			var ArrowColor = this.opt.arrowColor;
+			var CloseButtonX = this.opt.closeButtonX;
+			var CloseButtonY = this.opt.closeButtonY;
+			var CloseButtonW = this.opt.closeButtonW;
+			var CloseButtonH = this.opt.closeButtonH;
+      // 创建响应器配置项
+			var pOption = map.CreateResponserOptions("123");	
+			if(Lon !== null && Lon !== undefined && Lon !== ""){								
+				// 指向经纬度坐标经度
+				pOption.AddConfig("Longitude", Lon);								
+			}
+			if(Lat !== null && Lat !== undefined && Lat !== ""){
+				// 指向经纬度坐标维度
+				pOption.AddConfig("Latitude", Lat);								
+			}
+			if(Height !== null && Height !== undefined && Height !== ""){
+				// 指向经纬度坐标高度
+				pOption.AddConfig("PosHeight", Height);	
+			}
+			if(WinWidth !== null && WinWidth !== undefined && WinWidth !== ""){
+				// 窗口宽度
+				pOption.AddConfig("Widget", WinWidth);
+			}
+			if(WinHeight !== null && WinHeight !== undefined && WinHeight !== ""){
+				// 窗口高度
+				pOption.AddConfig("Height", WinHeight);	
+			}
+			if(ArrowSize !== null && ArrowSize !== undefined && ArrowSize !== ""){
+				// 箭头大小
+				pOption.AddConfig("ArrowSize", ArrowSize);
+			}
+			if(Radial !== null && Radial !== undefined && Radial !== ""){
+				// 圆角直径
+				pOption.AddConfig("Radial", Radial);
+			}
+			if(Url !== null && Url !== undefined && Url !== ""){
+				// 指向网页url
+				pOption.AddConfig("Url", Url);
+			}
+			if(CloseButton !== null && CloseButton !== undefined && 
+				CloseButton !== ""){					
+				// 是否显示关闭按钮
+				pOption.AddConfig("CloseButtonState", CloseButton);
+			}
+			if(ArrowColor !== null && ArrowColor !== undefined && ArrowColor !== ""){
+				// 箭头背景颜色
+				pOption.AddConfig("BKColor", ArrowColor);
+			}
+			if(CloseButtonX !== null && CloseButtonX !== undefined && 
+				CloseButtonX !== ""){
+				// 关闭按钮所在窗口x位置
+				pOption.AddConfig("CloseBtnPosX", CloseButtonX);
+			}
+			if(CloseButtonY !== null && CloseButtonY !== undefined && 
+				CloseButtonY !== ""){
+				// 关闭按钮所在窗口y位置
+				pOption.AddConfig("CloseBtnPosY", CloseButtonY);
+			}
+			if(CloseButtonW !== null && CloseButtonW !== undefined && 
+				CloseButtonW !== ""){
+				// 关闭按钮宽度
+				pOption.AddConfig("CloseBtnPosW", CloseButtonW);
+			}
+			if(CloseButtonH !== null && CloseButtonH !== undefined && 
+				CloseButtonH !== ""){
+				// 关闭按钮高度
+				pOption.AddConfig("CloseBtnPosH", CloseButtonH);
+			}
+      winObj.UpdateResponserOptions(pOption);
+		},
+		/**
+		 * 获取参数
 		 * @method updateWget
 		 * @author jg
 		 * @param { Object } winObj 窗口对象
@@ -4831,7 +4949,7 @@ var Map3D = CooMap.Class.extend({
 		 * @return { Null }
 		 * @version v6.0.8
 		 */
-		"updateWget": function(winObj, param) {
+		"WgetParam": function(winObj, param) {
       // 创建响应器配置项
 			var pOption = map.CreateResponserOptions("123");									
 			// 函数名
