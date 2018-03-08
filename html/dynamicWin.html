@@ -6,6 +6,27 @@
   <title>动态窗口</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="../css/dynamicWin/main.css" />
+  <script type="text/javascript" src="../js/lib/jquery/jquery-1.4.4.js"></script>
+  <script type="text/javascript">
+    function Test(a) {
+      alert(a);
+    }
+    function submit (param) {
+      return window.external.PushData(param);
+    }
+    function cancle (param) {
+      return window.external.PushData(param);
+    }
+    $(document).ready(function () {
+      $("#submit").click(function () {
+        var text = $("#content").val();
+        submit(text);
+      });
+      $("#cancle").click(function () {
+        cancle("ggggg");
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="inputInfo">

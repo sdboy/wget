@@ -4,8 +4,19 @@
  */
 define([
   ], function() {
+  var web = {
+    webObj : null
+  };
+  var postParam = function(str, id) {
+    var msg = web.webObj.GetToolsResult().GetConfigValueByKey("Param");
+    alert("str:" + str);
+    alert("id:" + id);
+    alert("msg:" + msg);
+  };
   var createWeb = function(mapObj, opt) {
     var obj = mapObj.createWebDialog(opt);
+    web.webObj = obj;
+    mapObj.addEvent("FireOnToolsNotify", postParam);
     return obj;
   };
   var removeWeb = function(mapObj, webObj) {
@@ -18,6 +29,8 @@ define([
   return {
     createWeb : createWeb,
     removeWeb : removeWeb,
-    updateWeb : updateWeb
+    updateWeb : updateWeb,
+    postParam : postParam,
+    web : web
   };
 });

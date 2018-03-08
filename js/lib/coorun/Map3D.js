@@ -29,7 +29,7 @@ var Map3D = CooMap.Class.extend({
 			this.option = option;
 			this.option.stateFlag = this.option.stateFlag || true;
 			content3d = document.createElement("object");
-			//content3d.type = this.option.type || "application/x-CoorunAWP";
+			// content3d.type = this.option.type || "application/x-CoorunAWP";
 			content3d.classid = this.option.classid ||
 			  "clsid:A1F1748A-2B6E-4616-954D-3F39B11DF57D";
 			content3d.width=this.option.width || "100%";
@@ -4942,7 +4942,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/**
 		 * 获取参数
-		 * @method updateWget
+		 * @method WgetParam
 		 * @author jg
 		 * @param { Object } winObj 窗口对象
 		 * @param { String } param 参数

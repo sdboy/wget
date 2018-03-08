@@ -25,6 +25,16 @@ define([
     var flag = {
       flag : true
     };
+    var postParam = function (str, id) {
+      /*jshint maxcomplexity:2 */
+      if("TipsDialogResponser" === str){
+        var msg = result.winObj[0].GetResponserResult().
+          GetConfigValueByKey("Param");
+          console.log("msg:" + msg);
+        // alert("msg:" + msg);
+        // alert("id:" + id);
+      }
+    };
     /**
      * 获取屏幕的x,y坐标，创建动态框
      * @method getPos
@@ -57,6 +67,7 @@ define([
           closeButtonH : param.closeButtonH,
           param : param.param
         });
+        param.map.addEvent("FireOnResponserNotify", postParam);
         result.winObj.unshift(obj);
       }
       param.map.delEvent("FireOnLButtonUp", getPos);
@@ -101,10 +112,10 @@ define([
       }
     };
 
-    var getParam = function (param) {
+    var getParam = function (para) {
       /*jshint maxcomplexity:2 */
       if(result.winObj.length > 0){
-        param.map.WgetParam(result.winObj[0], param);
+        param.map.WgetParam(result.winObj[0], para);
       }     
     };
 

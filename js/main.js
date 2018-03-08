@@ -37,6 +37,7 @@ require([
   init.initialize("map");
   var map = init.map.mapObj;
   var SDKpath = init.map.SDKpath;
+  // var SDKevent = init.map.SDKevent;
   require([
     "loadGMS"
     ], function (loadGMS) {
@@ -55,11 +56,11 @@ require([
         x += 10;
         y += 10;
         var obj = webdialog.createWeb(map, {
-          url : "http://www.baidu.com",
+          url : "http://localhost:8081/wget/html/dynamicWin.html",
           left : "" + x,
           top : "" + y,
-          width : "320",
-          height : "320"
+          width : "240",
+          height : "80"
         });
         // 将新创建的对象放在数组头部
         webObj.unshift(obj);
@@ -84,15 +85,15 @@ require([
     ], function (event) {
       $("#createWin").click(function () {
         event.setParam(map, {
-          "winWidth" : "395",
-          "winHeight" : "240",
+          "winWidth" : "260",
+          "winHeight" : "100",
           "arrowSize" : "30",
           "radial" : "20",
-          "url" : "http://baidu.com",
+          "url" : "http://localhost:8081/wget/html/dynamicWin.html",
           "closeButton" : "true",
           "arrowColor" : "65, 177, 255",
-          "closeButtonX" : "365",
-          "closeButtonY" : "10",
+          "closeButtonX" : "220",
+          "closeButtonY" : "0",
           "closeButtonW" : "20",
           "closeButtonH" : "20",
           "param" : "kkkkk"
@@ -107,7 +108,7 @@ require([
         });
       });
       $("#getParam").click(function () {
-        event.getParam("kkkkk");
+        event.getParam("xxx");
       });
       $("#visibleWin").click(function () {
         event.visibleWin();
