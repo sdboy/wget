@@ -15,7 +15,7 @@ define(["Map3D"],
         width: "100%",
 			  height: "700px"
       });
-      // map.mapObj.getLicence("192.168.10.34@9059@");
+      map.mapObj.getLicence("192.168.10.34@9059@");
       // 获取SDK路径
       var path = map.mapObj.getSDKPath(); 
       map.SDKpath = path.substring(0, path.length - 4).replace(/\\/g, "\\\\");

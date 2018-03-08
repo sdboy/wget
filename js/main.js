@@ -14,7 +14,9 @@ require.config({
     webdialog : "app/wget/webdialog",
     wget : "app/wget/wget",
     event : "app/wget/event",
-    loadGMS : "app/loadModel/loadGMS"
+    loadGMS : "app/loadModel/loadGMS",
+    loadWin : "app/iframe/loadWin",
+    removeIframe : "app/iframe/removeIframe"
   },
   shim: {
     'BMap': {
@@ -41,8 +43,8 @@ require([
   require([
     "loadGMS"
     ], function (loadGMS) {
-    var model = loadGMS.loadBuild(map, "http://192.168.10.34:9502/HaiKang", 
-      "HaiKang_Compressed");
+    // var model = loadGMS.loadBuild(map, "http://192.168.10.34:9502/HaiKang", 
+      // "HaiKang_Compressed");
     map.flyPosition(120.2161886949898, 30.21208647541144, 63.70232508983463,
       4.351113551310101, -0.6722756375833641, 528.9511815746299, 3);
   });
@@ -113,5 +115,29 @@ require([
       $("#visibleWin").click(function () {
         event.visibleWin();
       });
-    });
+  });
+
+  require([
+    "loadWin"
+    ], function (loadWin) {
+      $("#createIframe").click(function () {
+        var root = $("body");
+        loadWin.createIframe(root, "./html/resultList.html", "resultList", {
+          "width" : "220px",
+          "height" : "220px",
+          "position" : "absolute",
+          "padding" : "0",
+          "margin" : "0",
+          "left" : "80px",
+          "top" : "40px",
+          "zIndex" : "999"
+        });
+      });
+      $("#removeIframe").click(function () {
+        var iframe = $("#resultList");
+        if(iframe.length > 0){
+          loadWin.destroyIframe(iframe);
+        }
+      });
+  });
 });
