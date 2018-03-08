@@ -122,7 +122,8 @@ require([
     ], function (loadWin) {
       $("#createIframe").click(function () {
         var root = $("body");
-        loadWin.createIframe(root, "./html/resultList.html", "resultList", {
+        loadWin.createIframe(root, "./html/resultList.html", "resultList", 
+          "true", {
           "width" : "220px",
           "height" : "220px",
           "position" : "absolute",
@@ -130,10 +131,12 @@ require([
           "margin" : "0",
           "left" : "80px",
           "top" : "40px",
-          "zIndex" : "999"
+          "zIndex" : "999",
+          "backgroundColor" : "transparent"
         });
       });
       $("#removeIframe").click(function () {
+        /*jshint maxcomplexity: 2 */
         var iframe = $("#resultList");
         if(iframe.length > 0){
           loadWin.destroyIframe(iframe);

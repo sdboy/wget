@@ -4,7 +4,7 @@ define([
   "removeIframe",
   "jquery"
   ], function(removeIframe) {
-    var createIframe = function (dom, src, id, styleObj) {
+    var createIframe = function (dom, src, id, trans, styleObj) {
       var iframe = $("<iframe></iframe>");
       $(iframe).css("width", styleObj.width);
       $(iframe).css("height", styleObj.height);
@@ -14,8 +14,10 @@ define([
       $(iframe).css("left", styleObj.left);
       $(iframe).css("top", styleObj.top);
       $(iframe).css("z-index", styleObj.zIndex);
+      $(iframe).css("background-color", styleObj.backgroundColor);
       $(iframe).attr("frameborder", "0");
       $(iframe).attr("scrolling", "no");
+      $(iframe).attr("allowTransparency", trans);
       $(iframe).attr("id", id);
       $(iframe).attr("src", src);
       $(dom).prepend(iframe);
