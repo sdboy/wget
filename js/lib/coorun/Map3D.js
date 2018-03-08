@@ -16,13 +16,13 @@ var Map3D = CooMap.Class.extend({
 			"includes" : [CooMap["DomEvent"],CooMap["Conf"],CooMap["ClassEvent"]],
 		*/
 		/*
-			+------------------------------------------------------------------------------
+			+------------------------------------------------------------------------
 			* 函数: initialize
 			* Map 入口初始化
-			+------------------------------------------------------------------------------
+			+------------------------------------------------------------------------
 			* handel : HTML DIV 容器对象
 			* mapOptions : Array{}  地图初始化参数
-			+------------------------------------------------------------------------------
+			+------------------------------------------------------------------------
 		*/
     "initialize": function (option){
 			/*jshint maxcomplexity:6 */
@@ -541,9 +541,11 @@ var Map3D = CooMap.Class.extend({
 				map.RemoveLayer(layer);
 			}
 		},
+
 		"addRoamPath":function(coordStr,viewModel,state,speed){
 			var tlo = map.CreateLayerOptions("dynamicpathlayer");
-			tlo.AddConfig("LayerOptionsName", "DynamicPathLayerOptions"); /////动态路径配置信息 必须为DynamicPathLayerOptions
+      // 动态路径配置信息 必须为DynamicPathLayerOptions
+			tlo.AddConfig("LayerOptionsName", "DynamicPathLayerOptions"); 
 			tlo.AddConfig("Url", "");
 			tlo.AddConfig("PlayerMode", "PLAYER_ONEWAY");
 			tlo.AddConfig("ViewObjectMode",viewModel);
@@ -555,10 +557,12 @@ var Map3D = CooMap.Class.extend({
 			var dynamicPathLayer = map.CreateLayer("DynamicPathLayer", tlo);
 			dynamicPathLayer.AddObserver();
 			map.AddLayer(dynamicPathLayer);
-			dynamicPathLayer.SetVisible(state);//路径隐藏
+			// 路径隐藏
+			dynamicPathLayer.SetVisible(state);
 	    return dynamicPathLayer;
 		},
-		"playRoamPath": function(layer){  //播放路径
+		// 播放路径
+		"playRoamPath": function(layer){  
       /*jshint maxcomplexity:3 */
 			if(layer === null || layer === undefined){
 				return;
@@ -569,7 +573,8 @@ var Map3D = CooMap.Class.extend({
 	    tlo.AddConfig("PlayerState", "PLAYER_PLAY");
 			layer.UpdateLayerOptions(tlo);
 		},
-		"pauseRoamPath": function(layer){  //暂停播放
+		// 暂停播放
+		"pauseRoamPath": function(layer){  
       /*jshint maxcomplexity:3 */
 			if(layer === null || layer === undefined){
 				return;
@@ -579,7 +584,8 @@ var Map3D = CooMap.Class.extend({
 	    tlo.AddConfig("PlayerState", "PLAYER_PAUSE");
 	    layer.UpdateLayerOptions(tlo);
 		},
-		"stopRoamPath": function(layer){  //停止播放
+		// 停止播放
+		"stopRoamPath": function(layer){  
       /*jshint maxcomplexity:3 */
 			if(layer === null || layer === undefined){
 				return;
@@ -590,273 +596,488 @@ var Map3D = CooMap.Class.extend({
 	    layer.UpdateLayerOptions(tlo);
 		},
 		"getPointCount": function(){
-			var pathPointCount = content3d.GetICameraPtr().GetRoamPathPointCount();  //获取路径绘制的点总个数
+			// 获取路径绘制的点总个数
+			var pathPointCount = content3d.GetICameraPtr().GetRoamPathPointCount();  
 			return pathPointCount;
 		},
 		"getPointCoordinate": function(index){
-			var pathPointCoordinate = content3d.GetICameraPtr().GetRoamPathPointCoordinate(index);   //获取路径播放经过的点坐标信息
+			// 获取路径播放经过的点坐标信息
+			var pathPointCoordinate = content3d.GetICameraPtr().
+			  GetRoamPathPointCoordinate(index);   
 			return pathPointCoordinate;
 		},
 		/*本地WRL模型操作*/
 
 		"loadCPM":function(url){
-			var tlo = map.CreateLayerOptions("cpm");                           // 创建cpm图层配置，给配置起个名称，任意名称
-      tlo.addConfig("LayerOptionsName", "ModelLayerOptions");            // 创建配置类型, ModelLayerOptions代表模型数据配置，必须是此键值对
-      tlo.Addconfig("DataSourceTypeName", "cpm");                        // 数据源类型,代表CPM插件，必须是此键值对
-      tlo.addconfig("Url", url);                                         //要加载的数据路径，此数据需为CPM数据，不支持压缩数据
-      var cpmLayer = map.CreateLayer("ModelLayer", tlo);                 //创建模型图层，第一项参数必须为ModelLayer
-      map.AddLayer(cpmLayer);                                            //添加模型图层
+      // 创建cpm图层配置，给配置起个名称，任意名称
+			var tlo = map.CreateLayerOptions("cpm");
+      // 创建配置类型, ModelLayerOptions代表模型数据配置，必须是此键值对
+			tlo.addConfig("LayerOptionsName", "ModelLayerOptions"); 
+			// 数据源类型,代表CPM插件，必须是此键值对
+			tlo.Addconfig("DataSourceTypeName", "cpm");                        
+			// 要加载的数据路径，此数据需为CPM数据，不支持压缩数据
+			tlo.addconfig("Url", url);      
+			// 创建模型图层，第一项参数必须为ModelLayer
+			var cpmLayer = map.CreateLayer("ModelLayer", tlo); 
+			// 添加模型图层
+      map.AddLayer(cpmLayer); 
 			return  cpmLayer;
 		},
-		"modelPick":function(){//模型拾取
+		// 模型拾取
+		"modelPick":function(){
 			content3d.GetIObjectPickPtr().SetScenePickParam(true, 1);
 		},
-		"stopModelPick":function(){//停止拾取
+		// 停止拾取
+		"stopModelPick":function(){
 			content3d.GetIObjectPickPtr().SetScenePickParam(false, 1);
 		},
-		"modelSetHighlight":function(layer,state){//模型高亮显示
+		// 模型高亮显示
+		"modelSetHighlight":function(layer,state){
 			layer.SetHighlight(state);
 		},
 		/*测量工具--距离、水平、垂直*/
-		"addSphereMeasure": function(type){  //测量功能
+		"addSphereMeasure": function(type){ 
       /*jshint maxcomplexity:7 */
 			var Measurelayer;
 			var tlo = null;
 			var pSymbol = null;
 			var pStyle = null;
-			if(type === 0){//点测量
-				//////创建图层配置信息
-        tlo = map.CreateLayerOptions("pointMeasure");            // 创建分析图层配置，给配置起个名称，任意名称
-        tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");   // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-        tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");              //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-        tlo.AddConfig("PointSize", "5");                             //设置点击点的大小
-        tlo.AddConfig("TextVisible", "true");                        //文字是否被显示
-        tlo.AddConfig("TextLiftUp", "0");                            //文字显示的抬高高度
-        tlo.AddConfig("DataSourceTypeName", "as_point");             // 数据源类型,代表点测量，必须是此键值对
-
-        /////创建文字符号
-        pSymbol = map.CreateSymbol("TextSymbol");                //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
-        pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");     //设置文字颜色（RGBA）
-        pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");//设置字体类型,字体文件一定要存在
-        pSymbol.AddConfig("Size", "40");                             //设置字体清晰度
-        pSymbol.AddConfig("CharacterSize", "20"); 	                 //文字大小
-        pSymbol.AddConfig("CharacterMode", "0");                     // 取值 1 -- 始终朝向相机
-        pSymbol.AddConfig("AlignmentMode", "5");                     // 文字对齐方式
-        pSymbol.AddConfig("AxisAlignment", "6");                     // 旋转轴 0 - 7 ， 6: 自动
-        pSymbol.AddConfig("RemoveDuplicateLabels", "false");         // 去重复
-        pSymbol.AddConfig("IsEmbolden", "false");                    //字体是否加粗
-        pSymbol.AddConfig("IsTransform", "false");                   //字体是否为斜体
-        pSymbol.AddConfig("IsUnderline", "false");                   //字体是否有下划线
-        pSymbol.AddConfig("IsBack", "false");                        //是否设置背景色
-        pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");               //背景颜色，是否设置背景色为true有效
-
-        /////创建样式
-        pStyle = map.CreateStyle("Text");                        //创建Style，名字可以任意
-        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());         //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-
-        //////////将样式添加到图层配置里
-        tlo.AddConfig("Style", pStyle.GetConfig());                  //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-        Measurelayer = map.CreateLayer("AnalysisLayer", tlo);        //创建分析图层，第一项参数必须为AnalysisLayer
-        map.AddLayer(Measurelayer);                                  //添加分析图层
-			}
-			else if(type === 1){//水平测量
-			//////创建图层配置信息
-        tlo = map.CreateLayerOptions("horizontalMeasure");           // 创建分析图层配置，给配置起个名称，任意名称
-        tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-        tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-        tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
-        tlo.AddConfig("TextVisible", "true");                            //文字是否被显示
-        tlo.AddConfig("HorizontalMeasureLineColor", "1.0,0.0,0.0,1.0");  //设置线的颜色（RGBA）
-        tlo.AddConfig("LineWidth", "2");                                 //线宽
-        tlo.AddConfig("TextLiftUp", "0");                                //文字显示的抬高高度
-        tlo.AddConfig("MeasureUnit","0");		                             //0-米； 1-公里；2-海里
-    		tlo.AddConfig("MeasureUnitLanguage", "1");                       //0-英文； 1-中文
-    		tlo.AddConfig("IsDepthTest","true");	                           //是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
-        tlo.AddConfig("DataSourceTypeName", "as_horizontal");            // 数据源类型,代表水平距离测量，必须是此键值对
-
-        /////创建文字符号
-        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
-        pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
-        pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
-        pSymbol.AddConfig("Size", "40");                                 //设置字体大小
-        pSymbol.AddConfig("CharacterSize", "6"); 	                       //文字大小
-        pSymbol.AddConfig("CharacterMode", "0");                         // 取值 1 -- 始终朝向相机
-        pSymbol.AddConfig("AlignmentMode", "5");                         // 文字对齐方式
-        pSymbol.AddConfig("AxisAlignment", "6");                         // 旋转轴 0 - 7 ， 6: 自动
-        pSymbol.AddConfig("RemoveDuplicateLabels", "false");             // 去重复
-        pSymbol.AddConfig("IsEmbolden", "false");                        //字体是否加粗
-        pSymbol.AddConfig("IsTransform", "false");                       //字体是否为斜体
-        pSymbol.AddConfig("IsUnderline", "false");                       //字体是否有下划线
-        pSymbol.AddConfig("IsBack", "false");                            //是否设置背景色
-        pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   //背景颜色，是否设置背景色为true有效
-        //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
-
-        /////创建样式
-        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
-        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-
-        //////////将样式添加到图层配置里
-        tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-        Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
-        map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type === 2){//垂直测量
-			  //////创建图层配置信息
-        tlo = map.CreateLayerOptions("verticalMeasure");             // 创建分析图层配置，给配置起个名称，任意名称
-        tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-        tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-        tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
-        tlo.AddConfig("TextVisible", "true");                            //文字是否被显示
-        tlo.AddConfig("VerticalMeasureLineColor", "1.0,0.0,0.0,1.0");    //设置线的颜色（RGBA）
-        tlo.AddConfig("LineWidth", "2");                                 //线宽
-        tlo.AddConfig("TextLiftUp", "0");                                //文字显示的抬高高度
-        tlo.AddConfig("MeasureUnit","0");		                             //0-米； 1-公里；2-海里
-    	  tlo.AddConfig("MeasureUnitLanguage", "1");                       //0-英文； 1-中文
-				tlo.AddConfig("IsDepthTest","true");	                           //是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
-        tlo.AddConfig("DataSourceTypeName", "as_vertical");              // 数据源类型,代表垂直距离测量，必须是此键值对
-
-        /////创建文字符号
-        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
-        pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
-        pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.ttf");    //设置字体类型,字体文件一定要存在
-        pSymbol.AddConfig("Size", "40");                                 //设置字体大小
-        pSymbol.AddConfig("CharacterSize", "6"); 	                       //文字大小
-        pSymbol.AddConfig("CharacterMode", "0");                         // 取值 1 -- 始终朝向相机
-        pSymbol.AddConfig("AlignmentMode", "5");                         // 文字对齐方式
-        pSymbol.AddConfig("AxisAlignment", "6");                         // 旋转轴 0 - 7 ， 6: 自动
-        pSymbol.AddConfig("RemoveDuplicateLabels", "false");             // 去重复
-        pSymbol.AddConfig("IsEmbolden", "false");                        //字体是否加粗
-        pSymbol.AddConfig("IsTransform", "false");                       //字体是否为斜体
-        pSymbol.AddConfig("IsUnderline", "false");                       //字体是否有下划线
-        pSymbol.AddConfig("IsBack", "false");                            //是否设置背景色
-        pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   //背景颜色，是否设置背景色为true有效
-        //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
-
-        /////创建样式
-        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
-        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-
-        //////////将样式添加到图层配置里
-        tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-        Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
-        map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type === 3){//距离测量
-			  //////创建图层配置信息
-        tlo = map.CreateLayerOptions("distanceMesure");              // 创建分析图层配置，给配置起个名称，任意名称
-        tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-        tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-        tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
-        tlo.AddConfig("TextVisible", "true");                            //文字是否被显示
-        tlo.AddConfig("DistanceMeasureLineColor", "1.0,0.0,0.0,1.0");    //设置线的颜色（RGBA）
-        //tlo.AddConfig("MeasureUnit","11");		                         //10-平方米； 11-公顷； 12-平方公里； 13-平方海里
-        tlo.AddConfig("LineWidth", "2");                                 //线宽
-        tlo.AddConfig("TextLiftUp", "0");                                //文字显示的抬高高度
-        tlo.AddConfig("MeasureUnit","0");		                             //0-米； 1-公里；2-海里
-  			tlo.AddConfig("MeasureUnitLanguage","1");		                     //0-英文； 1-中文
-				tlo.AddConfig("IsDepthTest","true");	                           //是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
-        tlo.AddConfig("DataSourceTypeName", "as_distance");              // 数据源类型,代表距离测量，必须是此键值对
-
-        /////创建文字符号
-        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
-        pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
-        pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
-        pSymbol.AddConfig("Size", "40");                                 //设置字体大小
-        pSymbol.AddConfig("CharacterSize", "6"); 	                       //文字大小
-        pSymbol.AddConfig("CharacterMode", "0");                         // 取值 1 -- 始终朝向相机
-        pSymbol.AddConfig("AlignmentMode", "5");                         // 文字对齐方式
-        pSymbol.AddConfig("AxisAlignment", "6");                         // 旋转轴 0 - 7 ， 6: 自动
-        pSymbol.AddConfig("RemoveDuplicateLabels", "false");             // 去重复
-        pSymbol.AddConfig("IsEmbolden", "false");                        //字体是否加粗
-        pSymbol.AddConfig("IsTransform", "false");                       //字体是否为斜体
-        pSymbol.AddConfig("IsUnderline", "false");                       //字体是否有下划线
-        pSymbol.AddConfig("IsBack", "false");                            //是否设置背景色
-        pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   //背景颜色，是否设置背景色为true有效
-        //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
-
-        /////创建样式
-        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
-        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-
-        //////////将样式添加到图层配置里
-        tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-        Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
-        map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type === 4){//面积测量
-			  //////创建图层配置信息
-	      tlo = map.CreateLayerOptions("areaMeasure ");                // 创建分析图层配置，给配置起个名称，任意名称
-	      tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-	      tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-	      tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
-	      tlo.AddConfig("TextVisible", "true");                            //文字是否被显示
-	      tlo.AddConfig("AreaMeasureLineColor", "1.0,0.0,0.0,1.0");        //设置线的颜色（RGBA）
-	      tlo.AddConfig("PolygonColor", "0,1.0,1.0,0.5");                  //设置线的颜色（RGBA）
-	      tlo.AddConfig("MeasureUnit","10");		                           //10-平方米； 11-公顷； 12-平方公里； 13-平方海里
-	      tlo.AddConfig("MeasureUnitLanguage", "1");		                   //0-英文； 1-中文
-	      tlo.AddConfig("LineWidth", "2");                                 //线宽
-	      tlo.AddConfig("TextLiftUp", "0");                                //文字显示的抬高高度
-	      tlo.AddConfig("IsDepthTest","true");	                           //是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
-	      //tlo.AddConfig("LiftUp", "1");                                  //抬升高度，任意值
-	      tlo.AddConfig("DataSourceTypeName", "as_area");                  // 数据源类型,代表面积测量，必须是此键值对
-	      tlo.AddConfig("AreaMeasureType", "1");	                         // 0-空间面积测量； 1-水平面积测量； 2-地形面积测量（暂无）
-	      /////创建文字符号
-	      pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
-	      pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0,1");            //设置文字颜色（RGBA）
-	      pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
-	      pSymbol.AddConfig("Size", "40");                                 //设置字体大小
-	      pSymbol.AddConfig("CharacterMode", "0");                         // 取值 1 -- 始终朝向相机
-	      pSymbol.AddConfig("CharacterSize", "6"); 						             //文字大小
-	      pSymbol.AddConfig("AlignmentMode", "5");                         // 文字对齐方式
-	      pSymbol.AddConfig("AxisAlignment", "6");                         // 旋转轴 0 - 7 ， 6: 自动
-	      pSymbol.AddConfig("RemoveDuplicateLabels", "false");             // 去重复
-	      pSymbol.AddConfig("IsEmbolden", "false");                        //字体是否加粗
-	      pSymbol.AddConfig("IsTransform", "false");                       //字体是否为斜体
-	      pSymbol.AddConfig("IsUnderline", "false");                       //字体是否有下划线
-	      pSymbol.AddConfig("IsBack", "false");                            //是否设置背景色
-	      pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   //背景颜色，是否设置背景色为true有效
-	      //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
-	      /////创建样式
-	      pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
-	      pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-        //////////将样式添加到图层配置里
-	      tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-	      Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            //创建分析图层，第一项参数必须为AnalysisLayer
-	      map.AddLayer(Measurelayer);                                      //添加分析图层
-			}else if(type === 5){ // 创建面积测量
-				// 创建图层配置信息
-				var mlo = map.CreateLayerOptions("areaMeasure");                 //创建分析图层配置，给配置起个名称，任意名称
-				mlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       //创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
-				mlo.AddConfig("DataSourceTypeName","as_area");			             //数据源类型,代表垂直距离测量，必须是此键值对
-				mlo.AddConfig("PointColor","0,0.3,0.8,1.0"); 			               //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
-				mlo.AddConfig("PointSize","5"); 						                     //设置点击点的大小
-				mlo.AddConfig("AreaMeasureLineColor","0,0.9,0.2,1.0");           //设置线的颜色（RGBA）
-				mlo.AddConfig("PolygonColor","0,0.7,0.4,0.5"); 			             //设置面的颜色（RGBA）
-				mlo.AddConfig("MeasureUnit","10"); 						                   //10-平方米； 11-公顷； 12-平方公里； 13-平方海里
-				mlo.AddConfig("MeasureUnitLanguage", "1"); 				               //0-英文； 1-中文
-				mlo.AddConfig("AreaMeasureType", "2"); 					                 //0-空间面积测量； 1-水平面积测量； 2-地表面积测量
-				mlo.AddConfig("PolygonMode", "2" );                              //地表面积测量专有配置项 封闭区域显示方式选择 1,以多边形区域显示 2,以网格显示
-			  mlo.AddConfig("PageLevel", "5" );                                //地表面积测量专有配置项 0~16 当前层级累加该数值并调度相应层级瓦片
-		    mlo.AddConfig("GridLineColor", "1.0,1.0,0.0,1.0");               //地表面积测量专有配置项 格网线设置 当PolygonMode为2时选择
-				// 创建文字符号
-				pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串
-				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");       	 //设置文字颜色（RGBA）
-				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");  	 //设置字体类型,字体文件一定要存在
-				pSymbol.AddConfig("Size", "40"); 								                 //字体精度大小
-				pSymbol.AddConfig("CharacterSize", "6"); 						             //文字大小
-				pSymbol.AddConfig("CharacterMode", "0"); 						             //取值 1 -- 始终朝向相机
-				pSymbol.AddConfig("AlignmentMode", "5");						             //文字对齐方式
-				pSymbol.AddConfig("AxisAlignment", "6");						             //旋转轴 0 - 7 ， 6: 自动
-				pSymbol.AddConfig("RemoveDuplicateLabels", "false");			       //去重复
-				pSymbol.AddConfig("IsEmbolden", "false");						             //字体是否加粗
-				pSymbol.AddConfig("IsTransform", "false");						           //字体是否为斜体
-				pSymbol.AddConfig("IsUnderline", "false");						           //字体是否有下划线
-				pSymbol.AddConfig("IsBack", "false");							               //是否设置背景色
-				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");					         //背景颜色，是否设置背景色为true有效
-				// 创建样式
-				pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
-				pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
-				// 将样式添加到图层配置里
-				mlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
-				Measurelayer = map.CreateLayer("AnalysisLayer", mlo);      //创建分析图层，第一项参数必须为AnalysisLayer
-				map.AddLayer(Measurelayer);                                //添加分析图层
+			// 点测量
+			if(type === 0){
+				// 创建图层配置信息,给配置起个名称，任意名称
+				tlo = map.CreateLayerOptions("pointMeasure"); 
+				// 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");   
+				// 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");              
+				// 设置点击点的大小
+				tlo.AddConfig("PointSize", "5");                             
+				// 文字是否被显示
+				tlo.AddConfig("TextVisible", "true");                        
+				// 文字显示的抬高高度
+				tlo.AddConfig("TextLiftUp", "0");                            
+				// 数据源类型,代表点测量，必须是此键值对
+        tlo.AddConfig("DataSourceTypeName", "as_point"); 
+				/*
+				 * 创建文字符号，必须为TextSymbol字符串，
+				 * 当上面设置TextVisible设置为 true才创建并进行相应配置
+				 */
+				pSymbol = map.CreateSymbol("TextSymbol"); 
+				// 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0"); 
+				// 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");
+				// 设置字体清晰度
+				pSymbol.AddConfig("Size", "40");   
+				// 文字大小
+				pSymbol.AddConfig("CharacterSize", "20"); 
+				// 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0"); 
+				// 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");  
+				// 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");
+				// 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false"); 
+				//字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false"); 
+				//字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");  
+				//字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false"); 
+				//是否设置背景色
+				pSymbol.AddConfig("IsBack", "false"); 
+				//背景颜色，是否设置背景色为true有效
+        pSymbol.AddConfig("BackColor", "0,1.0,1.0,1"); 
+        // 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text"); 
+				/*
+				 * 添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+				 */
+        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); 
+        /*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				tlo.AddConfig("Style", pStyle.GetConfig());
+				// 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", tlo); 
+				// 添加分析图层
+        map.AddLayer(Measurelayer);        
+			}else if(type === 1){
+			  // 创建分析图层配置，给配置起个名称，任意名称
+				tlo = map.CreateLayerOptions("horizontalMeasure");           
+				// 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       
+				// 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  
+				// 设置点击点的大小
+				tlo.AddConfig("PointSize", "5");                                 
+				// 文字是否被显示
+				tlo.AddConfig("TextVisible", "true");                            
+				// 设置线的颜色（RGBA）
+				tlo.AddConfig("HorizontalMeasureLineColor", "1.0,0.0,0.0,1.0");  
+				// 线宽
+				tlo.AddConfig("LineWidth", "2");                                 
+				// 文字显示的抬高高度
+				tlo.AddConfig("TextLiftUp", "0");                                
+				// 0-米； 1-公里；2-海里
+				tlo.AddConfig("MeasureUnit","0");		                             
+				// 0-英文； 1-中文
+				tlo.AddConfig("MeasureUnitLanguage", "1");                       
+				// 是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
+				tlo.AddConfig("IsDepthTest","true");	                           
+				// 数据源类型,代表水平距离测量，必须是此键值对
+        tlo.AddConfig("DataSourceTypeName", "as_horizontal");            
+        /*
+				 * 创建文字符号，必须为TextSymbol字符串，
+				 * 当上面设置TextVisible设置为 true才创建并进行相应配置
+				 */
+				pSymbol = map.CreateSymbol("TextSymbol");
+				// 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         
+				// 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    
+				// 设置字体大小
+				pSymbol.AddConfig("Size", "40");                                 
+				// 文字大小
+				pSymbol.AddConfig("CharacterSize", "6"); 	                       
+				// 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0");                         
+				// 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");                         
+				// 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");                         
+				// 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false");             
+				// 字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false");                        
+				// 字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");                       
+				// 字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false");                       
+				// 是否设置背景色
+				pSymbol.AddConfig("IsBack", "false");                            
+				// 背景颜色，是否设置背景色为true有效
+				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   
+				// 字段精度
+        // pSymbol.AddConfig("FieldPrecision", "-20");                    
+        // 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            
+				/*
+				 * 获取添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig
+				 */
+        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());
+        /*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				tlo.AddConfig("Style", pStyle.GetConfig()); 
+				// 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            
+				// 添加分析图层
+        map.AddLayer(Measurelayer);                                      
+			}else if(type === 2){
+			  // 创建分析图层配置，给配置起个名称，任意名称
+				tlo = map.CreateLayerOptions("verticalMeasure");             
+				// 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       
+				// 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  
+				// 设置点击点的大小
+				tlo.AddConfig("PointSize", "5");                                 
+				// 文字是否被显示
+				tlo.AddConfig("TextVisible", "true");                            
+				// 设置线的颜色（RGBA）
+				tlo.AddConfig("VerticalMeasureLineColor", "1.0,0.0,0.0,1.0");    
+				// 线宽
+				tlo.AddConfig("LineWidth", "2");                                 
+				// 文字显示的抬高高度
+				tlo.AddConfig("TextLiftUp", "0");                                
+				// 0-米； 1-公里；2-海里
+				tlo.AddConfig("MeasureUnit","0");		                             
+				// 0-英文； 1-中文
+				tlo.AddConfig("MeasureUnitLanguage", "1");                       
+				// 是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
+				tlo.AddConfig("IsDepthTest","true");	                           
+        // 数据源类型,代表垂直距离测量，必须是此键值对
+        tlo.AddConfig("DataSourceTypeName", "as_vertical");              
+        /*
+				 * 创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+				 */
+				pSymbol = map.CreateSymbol("TextSymbol"); 
+				// 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         
+				// 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.ttf");    
+				// 设置字体大小
+				pSymbol.AddConfig("Size", "40");                                 
+				// 文字大小
+				pSymbol.AddConfig("CharacterSize", "6"); 	                       
+				// 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0");                         
+				// 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");                         
+				// 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");                         
+				// 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false");             
+				// 字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false");                        
+				// 字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");                       
+				// 字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false");                       
+				// 是否设置背景色
+				pSymbol.AddConfig("IsBack", "false");                            
+				// 背景颜色，是否设置背景色为true有效
+				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   
+				// 字段精度
+        // pSymbol.AddConfig("FieldPrecision", "-20");                    
+        // 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            
+				/*
+				 * 添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+				 */
+        pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); 
+        /*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				tlo.AddConfig("Style", pStyle.GetConfig()); 
+				// 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            
+				// 添加分析图层
+        map.AddLayer(Measurelayer);                                      
+			}else if(type === 3){
+			  // 创建分析图层配置，给配置起个名称，任意名称
+				tlo = map.CreateLayerOptions("distanceMesure");              
+				// 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       
+				// 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  
+				// 设置点击点的大小
+				tlo.AddConfig("PointSize", "5");                                 
+				// 文字是否被显示
+				tlo.AddConfig("TextVisible", "true");                            
+				// 设置线的颜色（RGBA）
+				tlo.AddConfig("DistanceMeasureLineColor", "1.0,0.0,0.0,1.0");    
+				// 10-平方米； 11-公顷； 12-平方公里； 13-平方海里
+				// tlo.AddConfig("MeasureUnit","11");		                         
+				// 线宽
+				tlo.AddConfig("LineWidth", "2");                                 
+				// 文字显示的抬高高度
+				tlo.AddConfig("TextLiftUp", "0");                                
+				// 0-米； 1-公里；2-海里
+				tlo.AddConfig("MeasureUnit","0");		                             
+				// 0-英文； 1-中文
+				tlo.AddConfig("MeasureUnitLanguage","1");		                     
+				// 是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
+				tlo.AddConfig("IsDepthTest","true");	                           
+        // 数据源类型,代表距离测量，必须是此键值对
+        tlo.AddConfig("DataSourceTypeName", "as_distance");              
+        /*
+				 * 创建文字符号，必须为TextSymbol字符串，
+				 * 当上面设置TextVisible设置为 true才创建并进行相应配置
+				 */
+				pSymbol = map.CreateSymbol("TextSymbol"); 
+				// 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         
+				// 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    
+				// 设置字体大小
+				pSymbol.AddConfig("Size", "40");                                 
+				// 文字大小
+				pSymbol.AddConfig("CharacterSize", "6"); 	                       
+				// 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0");                         
+				// 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");                         
+				// 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");                         
+				// 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false");             
+				// 字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false");                        
+				// 字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");                       
+				// 字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false");                       
+				// 是否设置背景色
+				pSymbol.AddConfig("IsBack", "false");                            
+				// 背景颜色，是否设置背景色为true有效
+				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   
+				// 字段精度
+        // pSymbol.AddConfig("FieldPrecision", "-20");                    
+        // 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            
+				/*
+				 * 添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+				 */
+				pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());  
+				/*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				tlo.AddConfig("Style", pStyle.GetConfig()); 
+				// 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            
+				// 添加分析图层
+        map.AddLayer(Measurelayer);                                      
+			}else if(type === 4){
+			  // 创建分析图层配置，给配置起个名称，任意名称
+				tlo = map.CreateLayerOptions("areaMeasure ");                
+				// 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       
+				// 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  
+				// 设置点击点的大小
+				tlo.AddConfig("PointSize", "5");                                 
+				// 文字是否被显示
+				tlo.AddConfig("TextVisible", "true");                            
+				// 设置线的颜色（RGBA）
+				tlo.AddConfig("AreaMeasureLineColor", "1.0,0.0,0.0,1.0");        
+				// 设置线的颜色（RGBA）
+				tlo.AddConfig("PolygonColor", "0,1.0,1.0,0.5");                  
+				// 10-平方米； 11-公顷； 12-平方公里； 13-平方海里
+				tlo.AddConfig("MeasureUnit","10");		                           
+				// 0-英文； 1-中文
+				tlo.AddConfig("MeasureUnitLanguage", "1");		                   
+				// 线宽
+				tlo.AddConfig("LineWidth", "2");                                 
+				// 文字显示的抬高高度
+				tlo.AddConfig("TextLiftUp", "0");                                
+				// 是否开启深度测试。false不开启，结果会浮在场景上，true实际显示位置
+				tlo.AddConfig("IsDepthTest","true");	                           
+				// 抬升高度，任意值
+				// tlo.AddConfig("LiftUp", "1");                                  
+				// 数据源类型,代表面积测量，必须是此键值对
+				tlo.AddConfig("DataSourceTypeName", "as_area");                  
+				// 0-空间面积测量； 1-水平面积测量； 2-地形面积测量（暂无）
+	      tlo.AddConfig("AreaMeasureType", "1");	                         
+	      /*
+				 * 创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+				 */
+				pSymbol = map.CreateSymbol("TextSymbol");
+				// 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0,1");            
+				// 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    
+				// 设置字体大小
+				pSymbol.AddConfig("Size", "40");                                 
+				// 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0");                         
+				// 文字大小
+				pSymbol.AddConfig("CharacterSize", "6"); 						             
+				// 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");                         
+				// 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");                         
+				// 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false");             
+				// 字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false");                        
+				// 字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");                       
+				// 字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false");                       
+				// 是否设置背景色
+				pSymbol.AddConfig("IsBack", "false");                            
+				// 背景颜色，是否设置背景色为true有效
+				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   
+				// 字段精度
+	      // pSymbol.AddConfig("FieldPrecision", "-20");                    
+	      // 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            
+				/*
+				 * 添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+				 */
+	      pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); 
+        /*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				tlo.AddConfig("Style", pStyle.GetConfig()); 
+				// 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", tlo);            
+				// 添加分析图层
+	      map.AddLayer(Measurelayer);                                      
+			}else if(type === 5){ 
+				// 创建分析图层配置，给配置起个名称，任意名称
+				var mlo = map.CreateLayerOptions("areaMeasure");                 
+        // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
+				mlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       
+        // 数据源类型,代表垂直距离测量，必须是此键值对
+				mlo.AddConfig("DataSourceTypeName","as_area");			             
+        // 设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
+				mlo.AddConfig("PointColor","0,0.3,0.8,1.0"); 			               
+        // 设置点击点的大小
+				mlo.AddConfig("PointSize","5"); 						                     
+        // 设置线的颜色（RGBA）
+				mlo.AddConfig("AreaMeasureLineColor","0,0.9,0.2,1.0");           
+        // 设置面的颜色（RGBA）
+				mlo.AddConfig("PolygonColor","0,0.7,0.4,0.5"); 			             
+        // 10-平方米； 11-公顷； 12-平方公里； 13-平方海里
+				mlo.AddConfig("MeasureUnit","10"); 						                   
+        // 0-英文； 1-中文
+				mlo.AddConfig("MeasureUnitLanguage", "1"); 				               
+        // 0-空间面积测量； 1-水平面积测量； 2-地表面积测量
+				mlo.AddConfig("AreaMeasureType", "2"); 					                 
+        // 地表面积测量专有配置项 封闭区域显示方式选择 1,以多边形区域显示 2,以网格显示
+				mlo.AddConfig("PolygonMode", "2" );                              
+        // 地表面积测量专有配置项 0~16 当前层级累加该数值并调度相应层级瓦片
+				mlo.AddConfig("PageLevel", "5" );                                
+				// 地表面积测量专有配置项 格网线设置 当PolygonMode为2时选择
+		    mlo.AddConfig("GridLineColor", "1.0,1.0,0.0,1.0");               
+				// 创建文字符号，必须为TextSymbol字符串
+				pSymbol = map.CreateSymbol("TextSymbol");                    
+        // 设置文字颜色（RGBA）
+				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");       	 
+        // 设置字体类型,字体文件一定要存在
+				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");  	 
+        // 字体精度大小
+				pSymbol.AddConfig("Size", "40"); 								                 
+        // 文字大小
+				pSymbol.AddConfig("CharacterSize", "6"); 						             
+        // 取值 1 -- 始终朝向相机
+				pSymbol.AddConfig("CharacterMode", "0"); 						             
+        // 文字对齐方式
+				pSymbol.AddConfig("AlignmentMode", "5");						             
+        // 旋转轴 0 - 7 ， 6: 自动
+				pSymbol.AddConfig("AxisAlignment", "6");						             
+        // 去重复
+				pSymbol.AddConfig("RemoveDuplicateLabels", "false");			       
+        // 字体是否加粗
+				pSymbol.AddConfig("IsEmbolden", "false");						             
+        // 字体是否为斜体
+				pSymbol.AddConfig("IsTransform", "false");						           
+        // 字体是否有下划线
+				pSymbol.AddConfig("IsUnderline", "false");						           
+        // 是否设置背景色
+				pSymbol.AddConfig("IsBack", "false");							               
+        // 背景颜色，是否设置背景色为true有效
+				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");					         
+				// 创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            
+        /*
+				 * 添加文字符号到Style里，第一参必须为TextSymbol字符串，
+				 * 第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
+				 */
+				pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig()); 
+				/*
+				 * 第一参必须为Style字符串，第二参为上面创建的Style的配置信息，
+				 * 通过 pStyle.GetConfig()获取
+				 */
+				mlo.AddConfig("Style", pStyle.GetConfig()); 
+        // 创建分析图层，第一项参数必须为AnalysisLayer
+				Measurelayer = map.CreateLayer("AnalysisLayer", mlo);      
+        // 添加分析图层
+				map.AddLayer(Measurelayer);                                
 			}
 			return Measurelayer;
 		},
