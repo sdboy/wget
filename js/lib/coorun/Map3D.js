@@ -345,18 +345,22 @@ var Map3D = CooMap.Class.extend({
       var MinRange = this.opt.MinRange || "0.0";
       var MaxRange = this.opt.MaxRange || "1000000.0";
       var Stipple = this.opt.Stipple || "-1";
-      var Width = this.opt.Width || "2";
+			var Width = this.opt.Width || "2";
+			var tlo = null;
+			var styleSheet = null;
+			var pSymbol = null;
+			var pStyle = null;
 			if(this.opt.type === 0){
-				var pSymbol = map.CreateSymbol("PointSymbol");
+				pSymbol = map.CreateSymbol("PointSymbol");
 				pSymbol.AddConfig("Size", Size);
 				pSymbol.AddConfig("Color", Color);
 
-				var pStyle = map.CreateStyle("Point");
+				pStyle = map.CreateStyle("Point");
 				pStyle.SetName("point");
 				pStyle.AddSymbol("PointSymbol", pSymbol.GetConfig());
 				pStyle.AddFilterName("BuildGeometryFilter");
 
-				var tlo = map.CreateLayerOptions("shp");
+				tlo = map.CreateLayerOptions("shp");
 				tlo.AddConfig("LayerOptionsName", "FeatureModelLayerOptions");
 				tlo.AddConfig("DataSourceTypeName","fmgeom");
 				tlo.AddConfig("Driver", "ESRI Shapefile");
@@ -368,7 +372,7 @@ var Map3D = CooMap.Class.extend({
 				tlo.AddConfig("MaxRange",MaxRange);
 				tlo.AddConfig("MinRange",MinRange);
         // 创建样式表
-  			var styleSheet = map.CreateStyleSheet();
+  			styleSheet = map.CreateStyleSheet();
 				// 将样式配置添加至样式表
      	 	styleSheet.AddStyle(pStyle.GetConfig());
 				// 将样式表配置添加至图层配置对象，第一参必须为StyleSheet字符串
@@ -389,7 +393,7 @@ var Map3D = CooMap.Class.extend({
 			  lStyle.SetName("line");
 			  lStyle.AddSymbol("LineSymbol", lSymbol.GetConfig());
 			  lStyle.AddFilterName("BuildGeometryFilter");
-			  var tlo = map.CreateLayerOptions("shp");
+			  tlo = map.CreateLayerOptions("shp");
 			  tlo.AddConfig("LayerOptionsName", "FeatureModelLayerOptions");
 			  tlo.AddConfig("DataSourceTypeName","fmgeom");
 			  tlo.AddConfig("Driver", "ESRI Shapefile");
@@ -401,7 +405,7 @@ var Map3D = CooMap.Class.extend({
 			  tlo.AddConfig("MaxRange",MaxRange);
 			  tlo.AddConfig("MinRange",MinRange);
 				// 创建样式表
-			  var styleSheet = map.CreateStyleSheet();
+			  styleSheet = map.CreateStyleSheet();
 				// 将样式配置添加至样式表
         styleSheet.AddStyle(lStyle.GetConfig());
 				// 将样式表配置添加至图层配置对象，第一参必须为StyleSheet字符串
@@ -413,13 +417,13 @@ var Map3D = CooMap.Class.extend({
 				return lineShpLayer;
 			}else if(this.opt.type === 2){
 				// 面
-				var pSymbol = map.CreateSymbol("PolygonSymbol");
+				pSymbol = map.CreateSymbol("PolygonSymbol");
 			  pSymbol.AddConfig("Color", Color);
-			  var pStyle = map.CreateStyle("Polygon");
+			  pStyle = map.CreateStyle("Polygon");
 			  pStyle.SetName("polygon");
 			  pStyle.AddSymbol("PolygonSymbol", pSymbol.GetConfig());
 			  pStyle.AddFilterName("BuildGeometryFilter");
-			  var tlo = map.CreateLayerOptions("shp");
+			  tlo = map.CreateLayerOptions("shp");
 			  tlo.AddConfig("LayerOptionsName", "FeatureModelLayerOptions");
 			  tlo.AddConfig("DataSourceTypeName","fmgeom");
 			  tlo.AddConfig("Driver", "ESRI Shapefile");
@@ -431,7 +435,7 @@ var Map3D = CooMap.Class.extend({
 			  tlo.AddConfig("MaxRange",MaxRange);
 			  tlo.AddConfig("MinRange",MinRange);
 				// 创建样式表
-		 	  var styleSheet = map.CreateStyleSheet();
+		 	  styleSheet = map.CreateStyleSheet();
 				// 将样式配置添加至样式表
 	      styleSheet.AddStyle(pStyle.GetConfig());
 				// 将样式表配置添加至图层配置对象，第一参必须为StyleSheet字符串
@@ -617,9 +621,12 @@ var Map3D = CooMap.Class.extend({
 		"addSphereMeasure": function(type){  //测量功能
       /*jshint maxcomplexity:7 */
 			var Measurelayer;
+			var tlo = null;
+			var pSymbol = null;
+			var pStyle = null;
 			if(type === 0){//点测量
 				//////创建图层配置信息
-        var tlo = map.CreateLayerOptions("pointMeasure");            // 创建分析图层配置，给配置起个名称，任意名称
+        tlo = map.CreateLayerOptions("pointMeasure");            // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");   // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
         tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");              //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
         tlo.AddConfig("PointSize", "5");                             //设置点击点的大小
@@ -628,7 +635,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("DataSourceTypeName", "as_point");             // 数据源类型,代表点测量，必须是此键值对
 
         /////创建文字符号
-        var pSymbol = map.CreateSymbol("TextSymbol");                //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+        pSymbol = map.CreateSymbol("TextSymbol");                //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
         pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");     //设置文字颜色（RGBA）
         pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");//设置字体类型,字体文件一定要存在
         pSymbol.AddConfig("Size", "40");                             //设置字体清晰度
@@ -644,7 +651,7 @@ var Map3D = CooMap.Class.extend({
         pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");               //背景颜色，是否设置背景色为true有效
 
         /////创建样式
-        var pStyle = map.CreateStyle("Text");                        //创建Style，名字可以任意
+        pStyle = map.CreateStyle("Text");                        //创建Style，名字可以任意
         pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());         //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 
         //////////将样式添加到图层配置里
@@ -654,7 +661,7 @@ var Map3D = CooMap.Class.extend({
 			}
 			else if(type === 1){//水平测量
 			//////创建图层配置信息
-        var tlo = map.CreateLayerOptions("horizontalMeasure");           // 创建分析图层配置，给配置起个名称，任意名称
+        tlo = map.CreateLayerOptions("horizontalMeasure");           // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
         tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
         tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
@@ -668,7 +675,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("DataSourceTypeName", "as_horizontal");            // 数据源类型,代表水平距离测量，必须是此键值对
 
         /////创建文字符号
-        var pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
         pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
         pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
         pSymbol.AddConfig("Size", "40");                                 //设置字体大小
@@ -685,7 +692,7 @@ var Map3D = CooMap.Class.extend({
         //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
 
         /////创建样式
-        var pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
+        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
         pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 
         //////////将样式添加到图层配置里
@@ -694,7 +701,7 @@ var Map3D = CooMap.Class.extend({
         map.AddLayer(Measurelayer);                                      //添加分析图层
 			}else if(type === 2){//垂直测量
 			  //////创建图层配置信息
-        var tlo = map.CreateLayerOptions("verticalMeasure");             // 创建分析图层配置，给配置起个名称，任意名称
+        tlo = map.CreateLayerOptions("verticalMeasure");             // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
         tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
         tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
@@ -708,7 +715,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("DataSourceTypeName", "as_vertical");              // 数据源类型,代表垂直距离测量，必须是此键值对
 
         /////创建文字符号
-        var pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
         pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
         pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.ttf");    //设置字体类型,字体文件一定要存在
         pSymbol.AddConfig("Size", "40");                                 //设置字体大小
@@ -725,7 +732,7 @@ var Map3D = CooMap.Class.extend({
         //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
 
         /////创建样式
-        var pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
+        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
         pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 
         //////////将样式添加到图层配置里
@@ -734,7 +741,7 @@ var Map3D = CooMap.Class.extend({
         map.AddLayer(Measurelayer);                                      //添加分析图层
 			}else if(type === 3){//距离测量
 			  //////创建图层配置信息
-        var tlo = map.CreateLayerOptions("distanceMesure");              // 创建分析图层配置，给配置起个名称，任意名称
+        tlo = map.CreateLayerOptions("distanceMesure");              // 创建分析图层配置，给配置起个名称，任意名称
         tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
         tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
         tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
@@ -749,7 +756,7 @@ var Map3D = CooMap.Class.extend({
         tlo.AddConfig("DataSourceTypeName", "as_distance");              // 数据源类型,代表距离测量，必须是此键值对
 
         /////创建文字符号
-        var pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+        pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
         pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");         //设置文字颜色（RGBA）
         pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
         pSymbol.AddConfig("Size", "40");                                 //设置字体大小
@@ -766,7 +773,7 @@ var Map3D = CooMap.Class.extend({
         //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
 
         /////创建样式
-        var pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
+        pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
         pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 
         //////////将样式添加到图层配置里
@@ -775,7 +782,7 @@ var Map3D = CooMap.Class.extend({
         map.AddLayer(Measurelayer);                                      //添加分析图层
 			}else if(type === 4){//面积测量
 			  //////创建图层配置信息
-	      var tlo = map.CreateLayerOptions("areaMeasure ");                // 创建分析图层配置，给配置起个名称，任意名称
+	      tlo = map.CreateLayerOptions("areaMeasure ");                // 创建分析图层配置，给配置起个名称，任意名称
 	      tlo.AddConfig("LayerOptionsName", "AnalysisLayerOptions");       // 创建配置类型, AnalysisLayerOptions代表分析图层数据配置，必须是此键值对
 	      tlo.AddConfig("PointColor", "0.0,0.0,1.0,1.0");                  //设置点击点的颜色透明度（RGBA） 1为不透明 0为透明
 	      tlo.AddConfig("PointSize", "5");                                 //设置点击点的大小
@@ -791,7 +798,7 @@ var Map3D = CooMap.Class.extend({
 	      tlo.AddConfig("DataSourceTypeName", "as_area");                  // 数据源类型,代表面积测量，必须是此键值对
 	      tlo.AddConfig("AreaMeasureType", "1");	                         // 0-空间面积测量； 1-水平面积测量； 2-地形面积测量（暂无）
 	      /////创建文字符号
-	      var pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
+	      pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串，当上面设置TextVisible设置为 true才创建并进行相应配置
 	      pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0,1");            //设置文字颜色（RGBA）
 	      pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");    //设置字体类型,字体文件一定要存在
 	      pSymbol.AddConfig("Size", "40");                                 //设置字体大小
@@ -807,7 +814,7 @@ var Map3D = CooMap.Class.extend({
 	      pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");                   //背景颜色，是否设置背景色为true有效
 	      //pSymbol.AddConfig("FieldPrecision", "-20");                    //字段精度
 	      /////创建样式
-	      var pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
+	      pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
 	      pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
         //////////将样式添加到图层配置里
 	      tlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
@@ -829,7 +836,7 @@ var Map3D = CooMap.Class.extend({
 			  mlo.AddConfig("PageLevel", "5" );                                //地表面积测量专有配置项 0~16 当前层级累加该数值并调度相应层级瓦片
 		    mlo.AddConfig("GridLineColor", "1.0,1.0,0.0,1.0");               //地表面积测量专有配置项 格网线设置 当PolygonMode为2时选择
 				// 创建文字符号
-				var pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串
+				pSymbol = map.CreateSymbol("TextSymbol");                    //创建文字符号，必须为TextSymbol字符串
 				pSymbol.AddConfig("FillingColor", "1.0, 0.0, 0.0, 1.0");       	 //设置文字颜色（RGBA）
 				pSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.TTF");  	 //设置字体类型,字体文件一定要存在
 				pSymbol.AddConfig("Size", "40"); 								                 //字体精度大小
@@ -844,7 +851,7 @@ var Map3D = CooMap.Class.extend({
 				pSymbol.AddConfig("IsBack", "false");							               //是否设置背景色
 				pSymbol.AddConfig("BackColor", "0,1.0,1.0,1");					         //背景颜色，是否设置背景色为true有效
 				// 创建样式
-				var pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
+				pStyle = map.CreateStyle("Text");                            //创建Style，名字可以任意
 				pStyle.AddSymbol("TextSymbol", pSymbol.GetConfig());             //添加文字符号到Style里，第一参必须为TextSymbol字符串，第二参为上面创建的文字符号的配置信息，通过 pSymbol.GetConfig()获取
 				// 将样式添加到图层配置里
 				mlo.AddConfig("Style", pStyle.GetConfig());                      //第一参必须为Style字符串，第二参为上面创建的Style的配置信息，通过 pStyle.GetConfig()获取
@@ -1195,19 +1202,21 @@ var Map3D = CooMap.Class.extend({
 			var ScreenX = this.opt.screenX;                                             //屏幕坐标X
 			var ScreenY = this.opt.screenY;                                             //屏幕坐标Y
 			var coordContent;
+			var convert = null;
+			var positions = null;
 			if(type === 1){//经纬度转场景坐标
-				var positions = map.CreatePosition(lon,lat,height);                       //获取点对象
-				var convert = translate.ConvertLongLatHeightToXYZ(positions);
+				positions = map.CreatePosition(lon,lat,height);                       //获取点对象
+				convert = translate.ConvertLongLatHeightToXYZ(positions);
 				coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ()+";";
 			}else if(type === 2){//场景坐标转经纬度
-				var positions = map.CreatePosition(PosX,PosY,PosZ);                       //获取点对象
-				var convert = translate.ConvertXYZToLongLatHeight(positions);
+				positions = map.CreatePosition(PosX,PosY,PosZ);                       //获取点对象
+				convert = translate.ConvertXYZToLongLatHeight(positions);
 			  coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ();
 			}else if(type === 3){                                                        //屏幕坐标转经纬度
-				var convert = translate.ScreenPosToWorldPos(ScreenX,ScreenY);
+				convert = translate.ScreenPosToWorldPos(ScreenX,ScreenY);
 				coordContent = convert.GetX()+","+convert.GetY()+","+convert.GetZ();
 			}else if(type === 4){                                                        //经纬度转屏幕坐标
-				var positions = map.CreatePosition(lon,lat,height);
+				positions = map.CreatePosition(lon,lat,height);
 			 	var sPos = translate.WorldPosToScreenPos(positions);
 			  coordContent = sPos.GetX()+","+sPos.GetY();
 			}
@@ -1831,7 +1840,7 @@ var Map3D = CooMap.Class.extend({
  			pOption.AddConfig("PickLayerIdList",la);                        //拾取图层id
       pOption.AddConfig("PickColor", "1.0,0,0,1.0");
       pOption.AddConfig("IsChangeColor", "true");
-      pickResp = map.CreateResponser("PickVectorResponser", pOption); //创建矢量拾取响应器，第一参必须为PickVectorResponser字符串
+      var pickResp = map.CreateResponser("PickVectorResponser", pOption); //创建矢量拾取响应器，第一参必须为PickVectorResponser字符串
       pickResp.AddObserver();
       map.AddResponser(pickResp);
 			return pickResp;
@@ -1872,7 +1881,7 @@ var Map3D = CooMap.Class.extend({
 		   	imageValue:imageValue,
 		   	textName:textName,
 		   	points:points
-	    }
+	    };
 	    return result;
 		},
 		"updatePickLabel":function(layer,pickResp){
@@ -1889,12 +1898,17 @@ var Map3D = CooMap.Class.extend({
 			var ShpUrl = this.option.shpUrl || "";//矢量文件的路径
 			var State = this.option.state || true;
 			var Height = this.option.height || 0;
-			var Name = this.option.name || "NAME"
+			var Name = this.option.name || "NAME";
+			var tSymbol = null;
+			var pStyle = null;
+			var styleSheet = null;
+			var res = null;
+			var reslib = null;
 			var pSymbol = map.CreateSymbol("PointSymbol"); ////创建类型为PointSymbol的符号，必须为PointSymbol字符串
 	    pSymbol.AddConfig("Size", "1"); ////点大小，范围0-10
 	    pSymbol.AddConfig("Color", "1.0,1.0,0.0,1.0"); ////颜色值0-1（RGBA），最后一位代表透明度，0为透明，1为不透
 	    if(type==="model"){
-		  	var tSymbol = map.CreateSymbol("ModelSymbol"); ////创建类型为ModelSymbol的符号，必须为ModelSymbol字符串
+		  	tSymbol = map.CreateSymbol("ModelSymbol"); ////创建类型为ModelSymbol的符号，必须为ModelSymbol字符串
 		    tSymbol.AddConfig("Heading", "0"); ////绕Z轴(世界坐标系方向相同 far->near)旋转,从far(-Z)向near(+Z)看去,逆时针为正，弧度表示
 		    tSymbol.AddConfig("Pitch", "-0.8"); //////绕Y轴(世界坐标系方向相同 down(-Y)向up(Y))旋转,从down(-Y)向up(+Y)看去,逆时针为正，弧度表示
 		    tSymbol.AddConfig("Roll", "0"); ////绕X轴(世界坐标系方向相同 left->right)旋转,从left(-X)向right(+X)看去,逆时针为正，弧度表示
@@ -1906,24 +1920,24 @@ var Map3D = CooMap.Class.extend({
 		    tSymbol.AddConfig("Url", ModelUrl); ////模型资源路径
 		    tSymbol.AddConfig("LibraryName", "reslib"); ////资源名称
 
-		     var res = map.CreateResource("ModelSymbol"); ////创建模型资源，此处必须为ModelSymbol
+		    res = map.CreateResource("ModelSymbol"); ////创建模型资源，此处必须为ModelSymbol
 		    res.AddConfig("Uri", ModelUrl); ////模型资源路径
-		    var reslib = map.CreateResourceLibrary("reslib"); ////创建资源库，名称和图层配置LibraryName设置的名称对应
+		    reslib = map.CreateResourceLibrary("reslib"); ////创建资源库，名称和图层配置LibraryName设置的名称对应
 		    reslib.AddResource(res); ////将资源添加至资源库
 
-		     var pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
+		    pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
 		    pStyle.SetName("point"); ////设置别名point
 		    pStyle.AddSymbol("PointSymbol", pSymbol.GetConfig()); ////将点符号配置添加到该样式
 		    pStyle.AddFilterName("BuildGeometryFilter"); //设置构建器符号为BuildGeometryFilter，必须为BuildGeometryFilter字符串
 		    pStyle.AddSymbol("ModelSymbol", tSymbol.GetConfig()); ////将符号配置添加到该样式，第一参必须为ModelSymbol字符串
 		    pStyle.AddFilterName("SubstituteModelFilter"); ////设置构建器符号为SubstituteModelFilter，必须为SubstituteModelFilter字符串，此为图标符号化和模型符号化共有
 
-		    var styleSheet = map.CreateStyleSheet(); ////创建样式表
+		    styleSheet = map.CreateStyleSheet(); ////创建样式表
 		    styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
 		    styleSheet.AddResLib(reslib.GetConfig()); ////将资源库添加至样式表
 
 			}else if(type === "text"){
-				var tSymbol = map.CreateSymbol("TextSymbol"); ////创建类型为TextSymbol的符号，必须为TextSymbol字符串
+				tSymbol = map.CreateSymbol("TextSymbol"); ////创建类型为TextSymbol的符号，必须为TextSymbol字符串
 	      tSymbol.AddConfig("FillingColor", "1.0, 1.0, 0.0, 1.0"); ////文字颜色（RGBA），颜色值0-1，最后一位代表透明度，0为透明，1为不透
 	      tSymbol.AddConfig("Font", "C:\\WINDOWS\\Fonts\\msyh.ttf"); ////文字字体，从系统字体目录中取，字体文件必须存在，配置一些参数时，如果没生效可能与字体文件相关，例如中文
 	      tSymbol.AddConfig("Size", "15"); ////文字大小
@@ -1942,7 +1956,7 @@ var Map3D = CooMap.Class.extend({
 	      tSymbol.AddConfig("FeatureLiftUp", Height); 				//接地线抬升值(配置该项接地线将是文字到点之间，否则是文字、点到地底)
 	      tSymbol.AddConfig("Content", "["+Name+"]"); ////[]里代表矢量的某字段名称
 
-	      var pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
+	      pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
 	      pStyle.AddSymbol("TextSymbol", tSymbol.GetConfig()); ////将符号配置添加到该样式，第一参必须为TextSymbol字符串
 	      pStyle.AddFilterName("BuildTextFilter"); ////设置文字构建器符号为BuildTextFilter，必须为BuildGeometryFilter字符串
 	      /////////////////////此部分是文字在场景中显示的配置/////////////////
@@ -1953,10 +1967,10 @@ var Map3D = CooMap.Class.extend({
 	      pStyle.AddFilterName("BuildGeometryFilter");  ////设置构建器符号为BuildGeometryFilter，必须为BuildGeometryFilter字符串
 	      /////////////////////此部分是点在场景中显示的配置/////////////////
 
-	      var styleSheet = map.CreateStyleSheet(); ////创建样式表
-	       styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
+	      styleSheet = map.CreateStyleSheet(); ////创建样式表
+	      styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
 			}else if(type === "icon"){
-				var tSymbol = map.CreateSymbol("IconSymbol"); ////创建类型为IconSymbol的符号，必须为IconSymbol字符串
+				tSymbol = map.CreateSymbol("IconSymbol"); ////创建类型为IconSymbol的符号，必须为IconSymbol字符串
 	      tSymbol.AddConfig("Align", "-5"); ////设置图片与要素的相对位置
 	      tSymbol.AddConfig("AxisAlignmentType", "0"); ////设置图片旋转模式
 	      tSymbol.AddConfig("CharacterMode", "2"); ////图片大小变化模式，0：随对象变化显示，1:随相机远近变化，2：随相机远近变化，同时不超过上限值Scale
@@ -1970,20 +1984,20 @@ var Map3D = CooMap.Class.extend({
 	      tSymbol.AddConfig("Url", IconUrl); ////图标资源路径
 	      tSymbol.AddConfig("LibraryName", "reslib"); ////资源名称
 
-	      var res = map.CreateResource("IconSymbol"); ////创建图标资源，此处必须为IconSymbol
+	      res = map.CreateResource("IconSymbol"); ////创建图标资源，此处必须为IconSymbol
 	      res.AddConfig("Uri", IconUrl); ////图标资源路径
-	      var reslib = map.CreateResourceLibrary("reslib"); ////创建资源库，名称和图层配置LibraryName设置的名称对应
+	      reslib = map.CreateResourceLibrary("reslib"); ////创建资源库，名称和图层配置LibraryName设置的名称对应
 	      reslib.AddResource(res); ////将资源添加至资源库
 	      /////////////////////此部分是图片在场景中显示的配置/////////////////
 
-	      var pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
+	      pStyle = map.CreateStyle("Point"); ////创建名称为Point的样式，名称任意
 	      pStyle.SetName("point"); ////设置别名point
 	      pStyle.AddSymbol("PointSymbol", pSymbol.GetConfig()); ////将点符号配置添加到该样式，第一参必须为PointSymbol字符串
 	      pStyle.AddFilterName("BuildGeometryFilter"); ////设置构建器符号为BuildGeometryFilter，必须为BuildGeometryFilter字符串
 	      pStyle.AddSymbol("IconSymbol", tSymbol.GetConfig()); ////将图片符号配置添加到该样式，第一参必须为IconSymbol字符串
 	      pStyle.AddFilterName("SubstituteModelFilter"); ////设置图片构建器符号为SubstituteModelFilter，此为图标符号化和模型符号化共有
 
-	      var styleSheet = map.CreateStyleSheet(); ////创建样式表
+	      styleSheet = map.CreateStyleSheet(); ////创建样式表
 	      styleSheet.AddStyle(pStyle.GetConfig()); ////将样式配置添加至样式表
 	      styleSheet.AddResLib(reslib.GetConfig()); ////将资源库添加至样式表*/
 			}
@@ -2608,6 +2622,7 @@ var Map3D = CooMap.Class.extend({
    		return shpLayer;
 		},
 		"addModelLabel":function(layer,opt){
+			/*jshint maxcomplexity: 6 */
 			this.opt = opt;
 			var modelID = this.opt.modelName || "default";
 			var xScale = this.opt.xScale || 1;
@@ -2637,6 +2652,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		//更新模型标注
 		"updateModelLabel":function(opt){
+			/*jshint maxcomplexity: 5 */
 			this.opt=opt;
 			var OldLabel = this.opt.oldLabel;
 			var NewLayer = this.opt.newLayer;
@@ -2696,6 +2712,7 @@ var Map3D = CooMap.Class.extend({
 		 * @version v6.0.6
 		 */
 		"createModelPick":function(layer){
+			/*jshint maxcomplexity:2 */
 			var lay = "";
 			for(var i = 0;i<layer.length;i++){
 				lay += layer[i].getlayerid() + ",";
@@ -2721,11 +2738,12 @@ var Map3D = CooMap.Class.extend({
 		   var result = {
 		   	 modelId:modelId,
 		   	 points:points
-		   }
+		   };
 		   return result;
 		},
 		//模型拾取后删除
 		"deleteMByPick":function(layer){
+			/*jshint maxcomplexity: 3 */
 			var lay = "";
 	  		for(var i = 0;i<layer.length;i++){
 			  lay += layer[i].getlayerid() + ",";
@@ -2793,7 +2811,7 @@ var Map3D = CooMap.Class.extend({
       extruSymbol.AddConfig("WallStyleName", "WallPolygonStyle"); ////拉伸体块墙体颜色，通过此关键字WallStyleName关联墙体面符号，第二参必须与墙体面符号所在样式名称一致
       extruSymbol.AddConfig("RoofStyleName", "RoofPolygonStyle"); ////拉伸体块屋顶颜色，通过此关键字RoofStyleName关联屋顶面符号，第二参必须与屋顶面符号所在样式名称一致
 
-      var eStyle = map.CreateStyle("ExtruStyle"); ////创建名称为ExtruStyle的样式，名称任意
+      var eStyle = map.CreateStyle("ExtruStyle"); ////创建名称为ExtruStyle的样式，名称任意
       eStyle.AddSymbol("PolygonExtrusionSymbol", extruSymbol.GetConfig()); ////将面挤出符号配置添加到该样式，第一参必须为PolygonExtrusionSymbol字符串
       eStyle.AddFilterName("ExtrudeGeometryFilter"); ////设置挤出构建器符号为ExtrudeGeometryFilter，必须为ExtrudeGeometryFilter字符串
 
@@ -2821,6 +2839,7 @@ var Map3D = CooMap.Class.extend({
 	 		return exshpLayer;
 		},
 		"addBlock":function(layer,arr){
+			/*jshint maxcomplexity:2 */
 			var id = layer.GetLayerID(); ////获取图层id
       var polygoneditLayer = map.GetFeatureModelLayer(id); ////获取矢量图层
 
@@ -2863,7 +2882,7 @@ var Map3D = CooMap.Class.extend({
       extruSymbol.AddConfig("WallStyleName", "WallPolygonStyle"); ////拉伸体块墙体颜色，通过此关键字WallStyleName关联墙体面符号，第二参必须与墙体面符号所在样式名称一致
       extruSymbol.AddConfig("RoofStyleName", "RoofPolygonStyle"); ////拉伸体块屋顶颜色，通过此关键字RoofStyleName关联屋顶面符号，第二参必须与屋顶面符号所在样式名称一致
 
-      var eStyle = map.CreateStyle("ExtruStyle"); ////创建名称为ExtruStyle的样式，名称任意
+      var eStyle = map.CreateStyle("ExtruStyle"); ////创建名称为ExtruStyle的样式，名称任意
       eStyle.AddSymbol("PolygonExtrusionSymbol", extruSymbol.GetConfig()); ////将面挤出符号配置添加到该样式，第一参必须为PolygonExtrusionSymbol字符串
       eStyle.AddFilterName("ExtrudeGeometryFilter"); ////设置挤出构建器符号为ExtrudeGeometryFilter，必须为ExtrudeGeometryFilter字符串
 
@@ -2914,12 +2933,13 @@ var Map3D = CooMap.Class.extend({
 	    Draw2DObjectLayer.AddObserver();
 	    map.AddLayer(Draw2DObjectLayer);
 
-	    var layermap = new Array();
+	    var layermap = [];
 	    layermap[Draw2DObjectLayer.GetLayerID()] = Draw2DObjectLayer;
 	    content3d.attachEvent("FireOnLayerNotify", function(layerid,type){
+				/*jshint maxcomplexity:3 */
 				var layer = layermap[layerid];
 			  var opt = layer.GetLayerResult();
-        if(opt.GetConfigValueByKey("DataSourceTypeName") == "as_draw2dobject"){
+        if(opt.GetConfigValueByKey("DataSourceTypeName") === "as_draw2dobject"){
           var points = opt.GetConfigValueByKey("Points");
           alert(points);
           map.RemoveLayer(Draw2DObjectLayer);
@@ -3053,6 +3073,7 @@ var Map3D = CooMap.Class.extend({
     //参数3：漫游速度，基准值为1.0，类似步行速度。可根据实际情况增加或减小
     //参数4：漫游俯仰角度，范围-89到-1之间*/
     "createRoamMode":function(opt){
+			/*jshint maxcomplexity:4 */
     	this.opt = opt;
     	var Height  =this.opt.height || 10;
     	var Speed = this.opt.speed || 1;
@@ -3100,6 +3121,7 @@ var Map3D = CooMap.Class.extend({
     },
     //热力图
     "hotMapLayer":function(result){
+			/*jshint maxcomplexity:2 */
     	var styleSheet = map.CreateStyleSheet();                                              //创建样式表
       for (var i = 0; i < result.length; i++)                                               //result 存储了很多不同颜色值（RGBA（0-255）），如 var result = new Array(new Array("A33", "120,15,15,70"),new Array("A5", "120,15,15,70"),new Array("B1", "120,15,15,70");
       {
@@ -3158,7 +3180,7 @@ var Map3D = CooMap.Class.extend({
 			addFeature.AddPoint(Lon,Lat,Height);
 	    addFeature.AddAttribute("Radius", r, 4);						 //添加属性值(1:int; 2:long; 3:float; 4:double; 5:string; 6:bool)
 	    addFeature.AddAttribute("C", color, 5);
-			featureId = editLayer.GetMaxFeatureID();					   //获取矢量图层要素最大ID
+			var featureId = editLayer.GetMaxFeatureID();					   //获取矢量图层要素最大ID
 			addFeature.SetFeatureId(featureId + 1); 						 //设置FeatureID
 			editLayer.AddFeature(addFeature);
     },
@@ -3250,6 +3272,7 @@ var Map3D = CooMap.Class.extend({
       navagation.SetViewRotateRoamMode(true, angle, 0, 1000);///绕视点，进行俯仰角为-45度的垂直旋转
 		},
 		"sensitivity":function(opt){
+			/*jshint maxcomplexity:3 */
 			this.opt = opt;
 			var MoveSpeed = this.opt.moveSpeed || "1";
 			var RotateSpeed = this.opt.rotateSpeed || "0.1";
@@ -3263,6 +3286,7 @@ var Map3D = CooMap.Class.extend({
 		},
 		/*根据坐标高亮模型*/
 		"highLightModel":function(layerId,lon,lat,height,color){
+			/*jshint maxcomplexity:2 */
 			var heightLightColor = color || "1.0,1.0,0,0.5";
 			var tlo = map.CreateOperationOptions("ModelOptions");           //创建配置类型,操作类型的配置
       tlo.AddConfig("OptionsTypeName", "ModelOptions");
@@ -3323,7 +3347,7 @@ var Map3D = CooMap.Class.extend({
 			var DirectPos = translate.ConvertLongLatHeightToXYZ(map.CreatePosition(
 				longlatPos.GetX(), longlatPos.GetY(), 0));
 			// 计算投影坐标单位向量
-			var DirectVec = map3D.normalize(DirectPos.GetX(), DirectPos.GetY(),
+			var DirectVec = map.normalize(DirectPos.GetX(), DirectPos.GetY(),
 			  DirectPos.GetZ());
 			// 配置区域
 			var RecordPos = map3D.record(worldPos.GetX(), worldPos.GetY(),
@@ -3591,8 +3615,8 @@ var Map3D = CooMap.Class.extend({
 			// 发射器名称
       mSmokeEmitter.AddConfig("Name", "SmokeEmitter");
 			// 发射方向 (0,1,0)
-      mSmokeEmitter.AddConfig("Direction", DirectVec.GetX() + ","
-        + DirectVec.GetY() * scale + "," + DirectVec.GetZ());
+			mSmokeEmitter.AddConfig("Direction", DirectVec.GetX() + ","+ 
+			  DirectVec.GetY() * scale + "," + DirectVec.GetZ());
 			// 最小角度
       mSmokeEmitter.AddConfig("MinAngle", "0");
 			// 最大角度
@@ -3618,8 +3642,8 @@ var Map3D = CooMap.Class.extend({
 			// 粒子发射器配置
       mSmokeGroup.AddConfig("ParticleEmitters", mSmokeEmitter.GetConfig());
 			// 重力方向　(0.0,0.4*scale,0.0)
-      mSmokeGroup.AddConfig("Gravity", DirectVec.GetX() + ","
-        + DirectVec.GetY() * scale + "," + DirectVec.GetZ());
+			mSmokeGroup.AddConfig("Gravity", DirectVec.GetX() + "," + 
+			  DirectVec.GetY() * scale + "," + DirectVec.GetZ());
 			// 粒子纹理配置
       mSmokeGroup.AddConfig("ImageUrl", dataPath +
 			  "\\texture\\explosion.bmp.dds");
@@ -4448,7 +4472,7 @@ var Map3D = CooMap.Class.extend({
         // 获取图层id
         var id = exlineshpLayer.GetLayerID(); 
         // 获取矢量图层
-        exeditlineLayer = map.GetFeatureModelLayer(id); 
+        var exeditlineLayer = map.GetFeatureModelLayer(id); 
         // 创建要素对象
         var addFeature = map.CreateFeature();     
         // 设置要素几何类型(1:点; 2:线; 3:环; 4:面; 5:多结构)

@@ -4,6 +4,7 @@ define([
   "jquery"
   ], function() {
     var removeIframe = function (iframe) {
+      /*jshint maxcomplexity:4 */
       if(iframe instanceof Object){
         if(iframe[0]){
           $(iframe[0]).src="about:blank";
