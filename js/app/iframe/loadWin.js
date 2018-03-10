@@ -17,7 +17,7 @@ define([
       $(iframe).css("background-color", styleObj.backgroundColor);
       $(iframe).attr("frameborder", "0");
       $(iframe).attr("scrolling", "no");
-      $(iframe).attr("allowTransparency", trans);
+      // $(iframe).attr("allowTransparency", trans);
       $(iframe).attr("id", id);
       $(iframe).attr("src", src);
       $(dom).prepend(iframe);

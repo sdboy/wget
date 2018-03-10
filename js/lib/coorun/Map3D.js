@@ -29,9 +29,9 @@ var Map3D = CooMap.Class.extend({
 			this.option = option;
 			this.option.stateFlag = this.option.stateFlag || true;
 			content3d = document.createElement("object");
-			// content3d.type = this.option.type || "application/x-CoorunAWP";
-			content3d.classid = this.option.classid ||
-			  "CLSID:E6F71384-437A-48ED-8E01-CD280CADF44F";
+			content3d.type = this.option.type || "application/x-CoorunAWP";
+			// content3d.classid = this.option.classid ||
+			  // "CLSID:E6F71384-437A-48ED-8E01-CD280CADF44F";
 			  // "clsid:A1F1748A-2B6E-4616-954D-3F39B11DF57D";
 			content3d.width=this.option.width || "100%";
 			content3d.height=this.option.height || "100%";
