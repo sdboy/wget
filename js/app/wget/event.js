@@ -88,7 +88,7 @@ define([
       param.radial = opt.radial;
       param.url = opt.url;
       param.closeButton = opt.closeButton;
-      param.arrowColor = opt.closeButton;
+      param.arrowColor = opt.arrowColor;
       param.closeButtonX = opt.closeButtonX;
       param.closeButtonY = opt.closeButtonY;
       param.closeButtonH = opt.closeButtonH;

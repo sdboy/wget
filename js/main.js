@@ -43,8 +43,8 @@ require([
   require([
     "loadGMS"
     ], function (loadGMS) {
-    // var model = loadGMS.loadBuild(map, "http://192.168.10.34:9502/HaiKang", 
-      // "HaiKang_Compressed");
+    var model = loadGMS.loadBuild(map, "http://192.168.10.34:9502/HaiKang", 
+      "HaiKang_Compressed");
     map.flyPosition(120.2161886949898, 30.21208647541144, 63.70232508983463,
       4.351113551310101, -0.6722756375833641, 528.9511815746299, 3);
   });
@@ -58,7 +58,7 @@ require([
         x += 10;
         y += 10;
         var obj = webdialog.createWeb(map, {
-          url : "http://localhost:8081/wget/html/dynamicWin.html",
+          url : "http://192.168.10.194:8081/wget/html/dynamicWin.html",
           left : "" + x,
           top : "" + y,
           width : "240",
@@ -91,7 +91,7 @@ require([
           "winHeight" : "100",
           "arrowSize" : "30",
           "radial" : "20",
-          "url" : "http://localhost:8081/wget/html/dynamicWin.html",
+          "url" : "http://192.168.10.194:8081/wget/html/dynamicWin.html",
           "closeButton" : "true",
           "arrowColor" : "65, 177, 255",
           "closeButtonX" : "220",
